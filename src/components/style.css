@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Saira+Stencil+One&display=swap');
+
+body {
+    background-image: url('../img/slide-motoboy-curitiba.jpg');
+    background-size: 100%;
+
+}
+
+.fundo {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}
+
+input {
+    max-width: 80vw;
+    width: 326px;
+    height: 58px;
+    background: #FFFFFF;
+    border-radius: 5px;
+    margin-bottom: 13px;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+}
+button {
+    max-width: 80vw;
+    width: 326px;
+    height: 58px;
+    background: #28d628;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+}
+.h1{
+    font-family: 'Raleway';
+    font-style: normal;
+    font-size: 35px;
+    color:aqua;
+}
+::placeholder {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    color: #000000;
+}
