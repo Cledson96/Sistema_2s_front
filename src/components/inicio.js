@@ -1,5 +1,6 @@
 import './style.css'
 import logo from '../img/motoboy-curitiba-logotipo.png'
+import { Link } from 'react-router-dom'
 
 
 export default function Inicio({ setdados }) {
@@ -13,7 +14,7 @@ export default function Inicio({ setdados }) {
                 <div className='menu_lateral'>
                     <h1 className='logado'> Logado: {nome}</h1>
                     <ul>
-                        <li> Cadastrar usuario</li>
+                        <Link to={'/cadastro'}><li> Cadastrar usuario</li></Link>
                         <li> Cadastrar motoboy</li>
                         <li> Entrada pedidos </li>
                         <li> Informações pedidos </li>
