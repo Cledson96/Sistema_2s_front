@@ -2,8 +2,8 @@
 
 body {
     background-image: url('../img/slide-motoboy-curitiba.jpg');
-    background-size: 100%;
-
+    background-size: contain;
+    min-height: 100vh;
 }
 
 .fundo {
@@ -13,6 +13,10 @@ body {
     height: 100vh;
     align-items: center;
     justify-content: center;
+}
+
+.logo_img {
+    margin-bottom: 30px;
 }
 
 input {
@@ -27,6 +31,7 @@ input {
     font-weight: 400;
     font-size: 20px;
 }
+
 button {
     max-width: 80vw;
     width: 326px;
@@ -40,12 +45,14 @@ button {
     font-size: 20px;
     line-height: 23px;
 }
-.h1{
+
+.h1 {
     font-family: 'Raleway';
     font-style: normal;
     font-size: 35px;
-    color:aqua;
+    color: aqua;
 }
+
 ::placeholder {
     font-family: 'Raleway';
     font-style: normal;
@@ -53,4 +60,44 @@ button {
     font-size: 20px;
     line-height: 23px;
     color: #000000;
+}
+
+.header {
+    height: 60px;
+    background: rgb(29, 77, 145);
+    background: -moz-linear-gradient(top, rgb(29, 77, 145) 0%, rgb(39, 123, 207) 50%, rgb(31, 108, 191) 51%, rgb(111, 172, 229) 100%);
+    background: -webkit-linear-gradient(top, rgb(29, 77, 145) 0%, rgb(39, 123, 207) 50%, rgb(31, 108, 191) 51%, rgb(111, 172, 229) 100%);
+    background: linear-gradient(to bottom, rgb(29, 77, 145) 0%, rgb(39, 123, 207) 50%, rgb(31, 108, 191) 51%, rgb(111, 172, 229) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1d4d91', endColorstr='#6face5', GradientType=0);
+
+}
+
+.logo_inicio {
+    max-height: 100%;
+    max-width: 30vw;
+}
+
+.fundo_inicio {
+    width: 100%;
+    height: calc(100vh - 60px);
+    display: flex;
+
+}
+
+.sistema {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+}
+.menu_lateral{
+    background-color: rgba(0, 0, 0, 0.753);
+    width: 20vw;
+    min-height: 100%;   
+}
+.logado{
+    color: #28d628;
+    font-size :30px;
+    background-color: rgba(128, 128, 128, 0.644);
+    border-radius: 5px;
 }

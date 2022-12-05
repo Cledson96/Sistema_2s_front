@@ -2,6 +2,7 @@ import './style.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { postLogin } from './requisicao'
 import { useState } from 'react';
+import logo from '../img/motoboy-curitiba-logotipo.png'
 
 export default function Login({ setdados }) {
     const [login, setlogin] = useState({});
@@ -21,15 +22,15 @@ export default function Login({ setdados }) {
         resposta.then((ref) => {
             setdados(ref.data)
             localStorage.setItem("token", ref.data.token);
-            localStorage.setItem("nome", ref.data.name);
-            navigate('/registros')
+            localStorage.setItem("nome_logado", ref.data.name);
+            navigate('/inicio')
         })
-        resposta.catch(() => { setcarregando([])})
+        resposta.catch((ref) => { setcarregando([]) ; alert(ref.response.data) })
 
     }
     return (
         <div className='fundo'>
-            <h1 className='h1'>2S Logistica</h1>
+            <img className='logo_img' alt='' src={logo}/>
             <input name="email" type="email" placeholder='E-mail' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
             <input name="password" type="password" placeholder='Senha' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
             <button onClick={autoriza} className='Entrar'>Entrar</button>
