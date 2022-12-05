@@ -47,8 +47,7 @@ button {
 }
 
 .h1 {
-    font-family: 'Raleway';
-    font-style: normal;
+    
     font-size: 35px;
     color: aqua;
 }
@@ -76,6 +75,15 @@ button {
     max-height: 100%;
     max-width: 30vw;
 }
+li{
+    margin-left: 10px;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 800;
+    color:white;
+    font-size: 20px;
+    margin-bottom: 25px;
+}
 
 .fundo_inicio {
     width: 100%;
@@ -100,4 +108,14 @@ button {
     font-size :30px;
     background-color: rgba(128, 128, 128, 0.644);
     border-radius: 5px;
+    margin-bottom: 30px;
+}
+.sair{
+    color: red;
+}
+ul{
+    display: flex;
+    flex-direction: column;
+    
+    height:100%;
 }
