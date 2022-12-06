@@ -13,3 +13,12 @@ export function postLogin(body) {
     const promise = axios.post(`${BASE_URL}/cadastro`, body);
     return promise;
   }
+  export function postCadastro_motoboy(body) {
+
+    const promise = axios.post(`${BASE_URL}/cadastro_motoboy`, body);
+    return promise;
+  }
+  export async function getmotoboys() {
+    const promise = await axios.get(`${BASE_URL}/cadastro_motoboy`)
+    return promise
+  }
