@@ -23,9 +23,13 @@ export function postLogin(body) {
     const promise = await axios.get(`${BASE_URL}/cadastro_motoboy`)
     return promise
   }
+  export async function getclientes() {
+    const promise = await axios.get(`${BASE_URL}/cadastro_cliente`)
+    return promise
+  }
   
   export function postCadastro_cliente(body) {
 
-    const promise = axios.post(`${BASE_URL}/cadastro_motoboy`, body);
+    const promise = axios.post(`${BASE_URL}/cadastro_cliente`, body);
     return promise;
   }

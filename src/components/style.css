@@ -283,3 +283,7 @@ td {
     display: flex;
     flex-direction: row;
 }
+.select_pedido{
+    height: 40px;
+    width: 40vw;
+}

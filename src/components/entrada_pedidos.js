@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import './style.css'
 import logo from '../img/motoboy-curitiba-logotipo.png'
 import { getmotoboys } from './requisicao'
+import { getclientes } from './requisicao'
 import { useEffect, useState } from 'react'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -14,9 +15,20 @@ export default function Entrada_pedidos() {
 
     let dataFormatada = ((startDate.getDate()) + "/" + ((startDate.getMonth() + 1)) + "/" + startDate.getFullYear());
     console.log(dataFormatada)
-    let nome = localStorage.getItem("nome_logado");
+    
     const [carregando, setcarregando] = useState([]);
     const [boys, setboys] = useState([]);
+    const [client, setclient] = useState([]);
+    const [cadastrar, setcadastrar] = useState([]);
+
+    function handleForm({ value, name }) {
+        setcadastrar({
+            ...cadastrar,
+            [name]: value,
+        });
+    };
+    console.log(cadastrar)
+
     useEffect(() => {
         let resposta = getmotoboys()
         resposta.then((res) => {
@@ -25,7 +37,15 @@ export default function Entrada_pedidos() {
         });
         resposta.catch(() => alert("Tivemos um problema para atualizar os motoboys!!"))
     }, carregando);
-    console.log(boys)
+    useEffect(() => {
+        let resposta = getclientes()
+        resposta.then((res) => {
+            setclient(res.data)
+
+        });
+        resposta.catch(() => alert("Tivemos um problema para atualizar os clientes!!"))
+    }, carregando);
+    console.log(client)
 
     return (
         <div className="sistema">
@@ -58,8 +78,8 @@ export default function Entrada_pedidos() {
                             placeholderText={dataFormatada} />
                         </span>
                         <span className='selection'>Cliente:</span> <select className='select' id="motoboys">
-                            <option value="Integrado">Entrada 2S</option>
-                            {boys ? boys.map((ref, index) => {
+                            <option value="Integrado"> 2S</option>
+                            {client ? client.map((ref, index) => {
                                 return (
                                     <option key={index} value={ref.email}>{ref.name}</option>
                                 )
@@ -68,7 +88,7 @@ export default function Entrada_pedidos() {
 
                         </select>
                         </span>
-
+                        <span className='selection'>Código pedido:</span> <input name={client[0]} className='select_pedido' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })}></input>
                     </div>
 
                 </div>

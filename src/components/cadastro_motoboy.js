@@ -22,7 +22,7 @@ export default function Cadastro() {
         let resposta = postCadastro_motoboy(cadastrar);
         
         resposta.then((ref) => {
-
+            alert("Cadastro realizado com sucesso")
             navigate('/inicio')
         })
         resposta.catch((ref) => { alert(ref.response.data)})

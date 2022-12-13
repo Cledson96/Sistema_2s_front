@@ -31,7 +31,7 @@ export default function Cadastro() {
             return alert("As senhas precisam ser iguais!!")
         }
         resposta.then((ref) => {
-
+            alert("Cadastro realizado com sucesso")
             navigate('/inicio')
         })
         resposta.catch((ref) => { alert(ref.response.data)})
