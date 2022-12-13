@@ -3,9 +3,11 @@ import Login from "./components/login";
 import Inicio from "./components/inicio";
 import Cadastro from "./components/cadastro";
 import Cadastro_motoboy from "./components/cadastro_motoboy";
+import Entrada_pedidos from "./components/entrada_pedidos";
 import Motoboy from "./components/motoboy";
 import { useState } from 'react';
 import '../src/reset.css'
+import Cadastrar_cliente from "./components/cadastrar_cliente";
 
 
 
@@ -22,6 +24,8 @@ export default function App() {
           <Route path='/cadastro' element={<Cadastro />} /> 
           <Route path='/cadastro_motoboy' element={<Cadastro_motoboy />} /> 
           <Route path='/motoboys' element={<Motoboy />} /> 
+          <Route path='/entrada_pedidos' element={<Entrada_pedidos />} /> 
+          <Route path='/cadastrar_cliente' element={<Cadastrar_cliente />} /> 
         
         </Routes>
 

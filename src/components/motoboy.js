@@ -4,6 +4,8 @@ import logo from '../img/motoboy-curitiba-logotipo.png'
 import Table from 'react-bootstrap/Table'
 import { getmotoboys } from './requisicao'
 import { useEffect, useState } from 'react';
+import menu_lateral from './menu_lateral';
+
 
 
 
@@ -26,18 +28,7 @@ export default function Motoboy() {
                 <img className='logo_inicio' alt='' src={logo} />
             </div>
             <div className='fundo_inicio'>
-                <div className='menu_lateral'>
-                    <h1 className='logado'> Logado: {nome}</h1>
-                    <ul>
-                        <Link className="link" to={'/inicio'}> <li> Tela inicial</li></Link>
-                        <Link className="link" to={'/cadastro'}><li> Cadastrar usuario</li></Link>
-                        <Link className="link" to={'/cadastro_motoboy'}> <li> Cadastrar motoboy</li></Link>
-                        <li> Entrada pedidos </li>
-                        <li> Informações pedidos </li>
-                        <li>Informações motoboys</li>
-                        <li className='sair'> sair</li>
-                    </ul>
-                </div>
+               {menu_lateral()}
                 <div className="lista_motoboys">
                     <div className='tabela'>
 
