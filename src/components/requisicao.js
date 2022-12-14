@@ -5,43 +5,53 @@ const BASE_URL = 'http://localhost:5000';
 
 export function postLogin(body) {
 
-    const promise = axios.post(`${BASE_URL}/`, body);
-    return promise;
-  }
+  const promise = axios.post(`${BASE_URL}/`, body);
+  return promise;
+}
 
-  export function postCadastro(body) {
+export function postCadastro(body) {
 
-    const promise = axios.post(`${BASE_URL}/cadastro`, body);
-    return promise;
-  }
-  export function postCadastro_motoboy(body) {
+  const promise = axios.post(`${BASE_URL}/cadastro`, body);
+  return promise;
+}
+export function postCadastro_motoboy(body) {
 
-    const promise = axios.post(`${BASE_URL}/cadastro_motoboy`, body);
-    return promise;
-  }
-  export async function getmotoboys() {
-    const promise = await axios.get(`${BASE_URL}/cadastro_motoboy`)
-    return promise
-  }
-  export async function getclientes() {
-    const promise = await axios.get(`${BASE_URL}/cadastro_cliente`)
-    return promise
-  }
-  
-  export function postCadastro_cliente(body) {
+  const promise = axios.post(`${BASE_URL}/cadastro_motoboy`, body);
+  return promise;
+}
+export async function getmotoboys() {
+  const promise = await axios.get(`${BASE_URL}/cadastro_motoboy`)
+  return promise
+}
+export async function getclientes() {
+  const promise = await axios.get(`${BASE_URL}/cadastro_cliente`)
+  return promise
+}
 
-    const promise = axios.post(`${BASE_URL}/cadastro_cliente`, body);
-    return promise;
-  }
+export function postCadastro_cliente(body) {
 
-  export function postCadastro_pedidos(body) {
+  const promise = axios.post(`${BASE_URL}/cadastro_cliente`, body);
+  return promise;
+}
 
-    const promise = axios.post(`${BASE_URL}/entrada_pedidos`, body);
-    return promise;
-  }
+export function postCadastro_pedidos(body) {
 
-  export function getpedidos(body) {
+  const promise = axios.post(`${BASE_URL}/entrada_pedidos`, body);
+  return promise;
+}
 
-    const promise = axios.get(`${BASE_URL}/pedidos`, body);
-    return promise;
-  }
+export function getpedidos(body) {
+
+  const promise = axios.get(`${BASE_URL}/pedidos`, body);
+  return promise;
+}
+
+export function deletepedido(pedido) {
+  console.log(pedido)
+  const promise = axios.delete(`${BASE_URL}/deletapedidos`, {
+    headers: {
+      pedido
+    }
+  });
+  return promise;
+}

@@ -6,6 +6,8 @@ import { getclientes } from './requisicao'
 import { getpedidos } from './requisicao'
 import { postCadastro_pedidos } from './requisicao'
 import { useEffect, useState } from 'react'
+import { deletepedido } from './requisicao'
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import menu_lateral from './menu_lateral';
@@ -193,7 +195,7 @@ export default function Entrada_pedidos() {
                                                             `Tem certeza que deseja excluir o pedido ${ref.pedido} ?`
                                                         )
                                                         if (confirmBox === true) {
-                                                            alert("exclui!!!")
+                                                           deletepedido(ref.pedido)
                                                         }else{
                                                             alert("não cancelei")
                                                         }
@@ -214,7 +216,7 @@ export default function Entrada_pedidos() {
                                                             `Tem certeza que deseja excluir o pedido ${ref.pedido} ?`
                                                         )
                                                         if (confirmBox === true) {
-                                                            alert("exclui!!!")
+                                                            deletepedido(ref.pedido)
                                                         }else{
                                                             alert("não cancelei")
                                                         }
