@@ -33,3 +33,15 @@ export function postLogin(body) {
     const promise = axios.post(`${BASE_URL}/cadastro_cliente`, body);
     return promise;
   }
+
+  export function postCadastro_pedidos(body) {
+
+    const promise = axios.post(`${BASE_URL}/entrada_pedidos`, body);
+    return promise;
+  }
+
+  export function getpedidos(body) {
+
+    const promise = axios.get(`${BASE_URL}/pedidos`, body);
+    return promise;
+  }

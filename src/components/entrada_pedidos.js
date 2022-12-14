@@ -3,31 +3,82 @@ import './style.css'
 import logo from '../img/motoboy-curitiba-logotipo.png'
 import { getmotoboys } from './requisicao'
 import { getclientes } from './requisicao'
+import { getpedidos } from './requisicao'
+import { postCadastro_pedidos } from './requisicao'
 import { useEffect, useState } from 'react'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import menu_lateral from './menu_lateral';
+import Table from 'react-bootstrap/Table'
+
 
 export default function Entrada_pedidos() {
+    let nome = localStorage.getItem("nome_logado");
+
+
+
 
     const [selectedDate, setselectedDate] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
 
     let dataFormatada = ((startDate.getDate()) + "/" + ((startDate.getMonth() + 1)) + "/" + startDate.getFullYear());
-    console.log(dataFormatada)
-    
+
     const [carregando, setcarregando] = useState([]);
     const [boys, setboys] = useState([]);
     const [client, setclient] = useState([]);
-    const [cadastrar, setcadastrar] = useState([]);
+    const [cadastrar, setcadastrar] = useState({});
+    const [login, setlogin] = useState();
+    const [clientee, setclientee] = useState();
+    const [motoboy, setmotoboy] = useState();
+    const [pedid, setpedid] = useState();
+    const [tpedidos, settpedidos] = useState([])
+
+
+
+    useEffect(() => {
+        console.log(tpedidos)
+        let resposta = getpedidos()
+        resposta.then((res) => {
+            settpedidos(res.data)
+
+        });
+        resposta.catch(() => alert("Tivemos um problema para atualizar os pedidos!!"))
+    }, setcarregando);
+    
+
 
     function handleForm({ value, name }) {
         setcadastrar({
-            ...cadastrar,
-            [name]: value,
+
+            data: dataFormatada,
+            login,
+            cliente: clientee,
+            name: nome,
+            motoboy,
+            pedido: value
+
         });
+        console.log(cadastrar)
+
+
     };
-    console.log(cadastrar)
+    function autoriza() {
+        setcarregando(["referencia"])
+
+
+        let resposta = postCadastro_pedidos(cadastrar);
+
+        resposta.then((ref) => {
+            
+                              
+            alert("Cadastro realizado com sucesso")
+
+        })
+        resposta.catch((ref) => { alert(ref.response.data) })
+
+    }
+
+
 
     useEffect(() => {
         let resposta = getmotoboys()
@@ -45,7 +96,8 @@ export default function Entrada_pedidos() {
         });
         resposta.catch(() => alert("Tivemos um problema para atualizar os clientes!!"))
     }, carregando);
-    console.log(client)
+
+
 
     return (
         <div className="sistema">
@@ -53,21 +105,22 @@ export default function Entrada_pedidos() {
                 <img className='logo_inicio' alt='' src={logo} />
             </div>
             <div className='fundo_inicio'>
-               {menu_lateral()}
+                {menu_lateral()}
                 <div className="inicio">
                     <div className='forma'>
                         <h1 className='forma_titulo'>Entrada de pedidos</h1>
-                        <span className='selection'>Motoboy:</span> <select className='select' id="motoboys">
+                        <span className='selection'>Motoboy:</span> <select onChange={(e) => setmotoboy(e.target.value)} className='select' id="motoboys">
+                            <option ></option>
                             <option value="Integrado">Entrada 2S</option>
                             {boys ? boys.map((ref, index) => {
                                 return (
-                                    <option key={index} value={ref.email}>{ref.name}</option>
+                                    <option key={index} value={ref.name}>{ref.name}</option>
                                 )
 
                             }) : ""}
 
                         </select>
-                        <span className='selection'>Login utilizado:</span> <input className='select_login'></input>
+                        <span className='selection'>Login utilizado:</span> <input onChange={(e) => setlogin(e.target.value)} className='select_login'></input>
                         <br />
                         <br />
                         <span className='arruma'> <span className='selectionDate'>Data: <DatePicker
@@ -77,18 +130,77 @@ export default function Entrada_pedidos() {
                             id="dateselect"
                             placeholderText={dataFormatada} />
                         </span>
-                        <span className='selection'>Cliente:</span> <select className='select' id="motoboys">
-                            <option value="Integrado"> 2S</option>
-                            {client ? client.map((ref, index) => {
-                                return (
-                                    <option key={index} value={ref.email}>{ref.name}</option>
-                                )
+                            <span className='selection'>Cliente:</span> <select onChange={(e) => setclientee(e.target.value)} className='select' id="motoboys">
+                                <option    > </option>
+                                <option value="Integrado"  > 2S</option>
+                                {client ? client.map((ref, index) => {
+                                    return (
+                                        <option key={index} value={ref.name}>{ref.name}</option>
+                                    )
 
-                            }) : ""}
+                                }) : ""}
 
-                        </select>
+                            </select>
                         </span>
-                        <span className='selection'>Código pedido:</span> <input name={client[0]} className='select_pedido' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })}></input>
+                        <span className='selection'>Código pedido:</span> <input onKeyPress={(e) => {
+                            if (e.key === "Enter") {
+                                autoriza()
+
+                            }
+                        }} name="pedido" className='select_pedido' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })}></input>
+                        <div className='listapedidos'>
+                            <Table >
+
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Motoboy</th>
+                                        <th>Pedido</th>
+                                        <th>Data</th>
+                                        <th>login</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {tpedidos.map((ref, index) => {
+                                        let num = 0
+
+                                        if (ref.motoboy != motoboy) {
+                                            return
+                                        }
+                                        num++;
+                                        if (num % 2 == 0) {
+                                            return (
+                                                <tr className='par'>
+                                                    <td className='pedidostab'>{num}</td>
+                                                    <td className='pedidostab'>{ref.motoboy}</td>
+                                                    <td className='pedidostab'>{ref.pedido}</td>
+                                                    <td className='pedidostab'>{ref.data}</td>
+                                                    <td className='pedidostab'>{ref.login}</td>
+                                                </tr>
+                                            )
+                                        } else {
+                                            return (
+                                                <tr className='impar'>
+                                                    <td className='pedidostab'>{num}</td>
+                                                    <td className='pedidostab'>{ref.motoboy}</td>
+                                                    <td className='pedidostab'>{ref.pedido}</td>
+                                                    <td className='pedidostab'>{ref.data}</td>
+                                                    <td className='pedidostab'>{ref.login}</td>
+                                                </tr>
+                                            )
+
+                                        }
+
+                                    })}
+
+
+                                </tbody>
+
+                            </Table>
+
+                        </div>
                     </div>
 
                 </div>

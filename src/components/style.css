@@ -207,10 +207,14 @@ th {
 
 .par {
     background-color: rgb(11, 61, 168, 0.5);
+  
+  
 }
 
 .impar {
     background-color: rgb(28, 145, 199, 0.5);
+   
+   
 }
 
 td {
@@ -286,4 +290,15 @@ td {
 .select_pedido{
     height: 40px;
     width: 40vw;
+}
+.listapedidos{
+    margin-left: auto;
+    margin-right: auto;
+    border-style: solid;
+    border-width: 3px;
+    width: 90%;
+    height: 60%;
+}
+.pedidostab{
+    max-height: 30px;
 }
