@@ -298,7 +298,22 @@ td {
     border-width: 3px;
     width: 90%;
     height: 60%;
+    overflow:scroll; 
+    border-radius: 10px;
+   position: relative;
 }
 .pedidostab{
     max-height: 30px;
+
+}
+.excluir{
+    display: flex;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    font-size: 10px;
+    align-items: center;
 }

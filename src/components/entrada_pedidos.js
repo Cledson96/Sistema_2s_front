@@ -32,9 +32,20 @@ export default function Entrada_pedidos() {
     const [motoboy, setmotoboy] = useState();
     const [pedid, setpedid] = useState();
     const [tpedidos, settpedidos] = useState([])
+    const [tpedidosfiltro, settpedidosfiltro] = useState([])
 
 
-
+    function ativa() {
+        console.log("ativei")
+       
+        let resposta = getpedidos()
+        resposta.then((res) => {
+            settpedidos(res.data)
+            settpedidosfiltro(res.data.filter(ref => ref.motoboy === motoboy && ref.data === dataFormatada))
+        });
+        resposta.catch(() => alert("Tivemos um problema para atualizar os pedidos!!"))
+            ;
+    }
     useEffect(() => {
         console.log(tpedidos)
         let resposta = getpedidos()
@@ -44,7 +55,7 @@ export default function Entrada_pedidos() {
         });
         resposta.catch(() => alert("Tivemos um problema para atualizar os pedidos!!"))
     }, setcarregando);
-    
+
 
 
     function handleForm({ value, name }) {
@@ -67,17 +78,18 @@ export default function Entrada_pedidos() {
 
 
         let resposta = postCadastro_pedidos(cadastrar);
-
+      
         resposta.then((ref) => {
-            
-                              
+
+            ativa()
             alert("Cadastro realizado com sucesso")
+            settpedidosfiltro(tpedidos.filter(ref => ref.motoboy === motoboy && ref.data === dataFormatada))
 
         })
-        resposta.catch((ref) => { alert(ref.response.data) })
+        resposta.catch((ref) => { alert(ref.response.data) ;  settpedidosfiltro(tpedidos.filter(ref => ref.motoboy === motoboy && ref.data === dataFormatada))})
 
     }
-
+    
 
 
     useEffect(() => {
@@ -109,7 +121,7 @@ export default function Entrada_pedidos() {
                 <div className="inicio">
                     <div className='forma'>
                         <h1 className='forma_titulo'>Entrada de pedidos</h1>
-                        <span className='selection'>Motoboy:</span> <select onChange={(e) => setmotoboy(e.target.value)} className='select' id="motoboys">
+                        <span className='selection'>Motoboy:</span> <select onChange= {(e) => {setmotoboy(e.target.value); settpedidosfiltro(tpedidos.filter(ref => ref.motoboy === e.target.value && ref.data === dataFormatada))} }className='select' id="motoboys">
                             <option ></option>
                             <option value="Integrado">Entrada 2S</option>
                             {boys ? boys.map((ref, index) => {
@@ -125,12 +137,12 @@ export default function Entrada_pedidos() {
                         <br />
                         <span className='arruma'> <span className='selectionDate'>Data: <DatePicker
                             selected={selectedDate}
-                            onChange={(date) => setStartDate(date)}
+                            onChange={(date) => {setStartDate(date); ativa()}}
                             className="selectcalendar"
                             id="dateselect"
                             placeholderText={dataFormatada} />
                         </span>
-                            <span className='selection'>Cliente:</span> <select onChange={(e) => setclientee(e.target.value)} className='select' id="motoboys">
+                            <span className='selection'>Cliente:</span> <select onChange={(e) => {setclientee(e.target.value);}} className='select' id="motoboys">
                                 <option    > </option>
                                 <option value="Integrado"  > 2S</option>
                                 {client ? client.map((ref, index) => {
@@ -151,11 +163,12 @@ export default function Entrada_pedidos() {
                         <div className='listapedidos'>
                             <Table >
 
-                                <thead>
-                                    <tr>
+                                <thead >
+                                    <tr className='pedidostopo'>
                                         <th>#</th>
                                         <th>Motoboy</th>
                                         <th>Pedido</th>
+                                        <th>Cliente</th>
                                         <th>Data</th>
                                         <th>login</th>
 
@@ -163,31 +176,49 @@ export default function Entrada_pedidos() {
                                 </thead>
 
                                 <tbody>
-                                    {tpedidos.map((ref, index) => {
-                                        let num = 0
+                                    {tpedidosfiltro.map((ref, index) => {
 
-                                        if (ref.motoboy != motoboy) {
-                                            return
-                                        }
-                                        num++;
-                                        if (num % 2 == 0) {
+                                        ;
+                                        if (index % 2 == 0) {
                                             return (
                                                 <tr className='par'>
-                                                    <td className='pedidostab'>{num}</td>
+                                                    <td className='pedidostab'>{index + 1}</td>
                                                     <td className='pedidostab'>{ref.motoboy}</td>
                                                     <td className='pedidostab'>{ref.pedido}</td>
+                                                    <td className='pedidostab'>{ref.cliente}</td>
                                                     <td className='pedidostab'>{ref.data}</td>
                                                     <td className='pedidostab'>{ref.login}</td>
+                                                    <button onClick={() => {
+                                                        const confirmBox = window.confirm(
+                                                            `Tem certeza que deseja excluir o pedido ${ref.pedido} ?`
+                                                        )
+                                                        if (confirmBox === true) {
+                                                            alert("exclui!!!")
+                                                        }else{
+                                                            alert("não cancelei")
+                                                        }
+                                                    }} className='excluir'>X</button>
                                                 </tr>
                                             )
                                         } else {
                                             return (
                                                 <tr className='impar'>
-                                                    <td className='pedidostab'>{num}</td>
+                                                    <td className='pedidostab'>{index + 1}</td>
                                                     <td className='pedidostab'>{ref.motoboy}</td>
                                                     <td className='pedidostab'>{ref.pedido}</td>
+                                                    <td className='pedidostab'>{ref.cliente}</td>
                                                     <td className='pedidostab'>{ref.data}</td>
                                                     <td className='pedidostab'>{ref.login}</td>
+                                                    <button onClick={() => {
+                                                        const confirmBox = window.confirm(
+                                                            `Tem certeza que deseja excluir o pedido ${ref.pedido} ?`
+                                                        )
+                                                        if (confirmBox === true) {
+                                                            alert("exclui!!!")
+                                                        }else{
+                                                            alert("não cancelei")
+                                                        }
+                                                    }} className='excluir'>X</button>
                                                 </tr>
                                             )
 
