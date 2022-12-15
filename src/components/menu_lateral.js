@@ -11,7 +11,7 @@ export default function menu_lateral() {
                 <Link className="link" to={'/cadastrar_cliente'}> <li> Cadastrar cliente</li></Link>
                 <Link className="link" to={'/motoboys'}> <li> Motoboys cadastrados</li></Link>
                 <Link className="link" to={'/entrada_pedidos'}> <li> Entrada pedidos</li></Link>
-                <Link className="link" to={'/cadastrar_cliente'}> <li> cadastrar cliente</li></Link>
+                <Link className="link" to={'/entrada_ausente'}> <li> Entrada ausente</li></Link>
                 <li> Informações pedidos </li>
                 <li>Informações motoboys</li>
                 <li className='sair'> sair</li>

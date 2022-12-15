@@ -1,5 +1,5 @@
 import './style.css'
-import { postCadastro_cliente } from './requisicao'
+import { postCadastro } from './requisicao'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import logo from '../img/motoboy-curitiba-logotipo.png'
@@ -19,7 +19,7 @@ export default function Cadastrar_cliente() {
 
     function autoriza() {
         setcarregando(["referencia"])
-        let resposta = postCadastro_cliente(cadastrar);
+        let resposta = postCadastro(cadastrar);
 
         resposta.then((ref) => {
             alert("Cadastro realizado com sucesso")
