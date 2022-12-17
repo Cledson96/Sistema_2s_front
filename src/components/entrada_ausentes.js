@@ -4,9 +4,9 @@ import logo from '../img/motoboy-curitiba-logotipo.png'
 import { getmotoboys } from './requisicao'
 import { getclientes } from './requisicao'
 import { getpedidos } from './requisicao'
-import { postCadastro_pedidos } from './requisicao'
+import { putpedido } from './requisicao'
 import { useEffect, useState } from 'react'
-import DatePicker from "react-datepicker";
+
 import "react-datepicker/dist/react-datepicker.css";
 import menu_lateral from './menu_lateral';
 import Table from 'react-bootstrap/Table'
@@ -15,22 +15,15 @@ import { deletepedido } from './requisicao'
 
 
 
-export default function Entrada_pedidos() {
+export default function Entrada_ausentes() {
     let nome = localStorage.getItem("nome_logado");
 
-    const [selectedDate, setselectedDate] = useState(null);
-    const [startDate, setStartDate] = useState(new Date());
-
-    let dataFormatada = ((startDate.getDate()) + "/" + ((startDate.getMonth() + 1)) + "/" + startDate.getFullYear());
-
     const [carregando, setcarregando] = useState(true);
-    const [boys, setboys] = useState([]);
-    const [client, setclient] = useState([]);
-    const [cadastrar, setcadastrar] = useState({});
-    const [login, setlogin] = useState();
-    const [clientee, setclientee] = useState();
-    const [motoboy, setmotoboy] = useState();
+
+    const [pesquisar, setpesquisar] = useState();
+
     const [tpedidos, settpedidos] = useState();
+    const [pedidosfiltro, setpedidosfiltro] = useState();
 
     useEffect(() => {
         console.log("entrei")
@@ -44,49 +37,33 @@ export default function Entrada_pedidos() {
 
 
 
-    useEffect(() => {
-        let resposta = getmotoboys()
-        resposta.then((res) => {
-            setboys(res.data)
-
-        });
-        resposta.catch(() => alert("Tivemos um problema para atualizar os motoboys!!"))
-    }, carregando);
-
-    useEffect(() => {
-        let resposta = getclientes()
-        resposta.then((res) => {
-            setclient(res.data)
-
-        });
-        resposta.catch(() => alert("Tivemos um problema para atualizar os clientes!!"))
-    }, carregando);
-
-
-    function handleForm({ value, name }) {
-        setcadastrar({
-
-            data: dataFormatada,
-            login,
-            cliente: clientee,
-            name: nome,
-            motoboy,
-            pedido: value
-
-        });
+    function handleForm({ value }) {
+        setpesquisar(
+            value
+        );
 
 
     };
+    function pesquisa() {
+        let pesquisado = getpedidos(pesquisar);
+        console.log(pesquisar)
+        pesquisado.then((ref) => {
+            setpedidosfiltro(ref.data);
+            console.log(ref.data)
+        })
+        console.log(tpedidos)
+
+        pesquisado.catch((ref) => console.log(ref))
+    }
     function autoriza() {
-      
-      
-        let cadastrare = { ...cadastrar, cliente: clientee,motoboy }
-        console.log(cadastrare)
-        let resposta = postCadastro_pedidos(cadastrare);
+
+
+        let resposta = putpedido(pesquisar);
+
 
         resposta.then((ref) => {
 
-            alert("Cadastro realizado com sucesso")
+            alert("Ausente cadastrado com sucesso")
             setcarregando(!carregando)
 
         })
@@ -104,44 +81,10 @@ export default function Entrada_pedidos() {
                 {menu_lateral()}
                 <div className="inicio">
                     <div className='forma'>
-                        <h1 className='forma_titulo'>Entrada de pedidos</h1>
-                        <div className='ajuste'>
-                            <span className='selection'>Motoboy:</span> <select onChange={(e) => { setmotoboy(e.target.value); console.log(e.target.value) }} className='select' id="motoboys">
-                                <option ></option>
-                                <option value="Integrado">Entrada 2S</option>
-                                {boys ? boys.map((ref, index) => {
-                                    return (
-                                        <option key={index} value={ref.name}>{ref.name}</option>
-                                    )
+                        <h1 className='forma_ausente'>Entrada de ausentes</h1>
 
-                                }) : ""}
 
-                            </select>
-                            <span className='selection'>Login utilizado:</span> <input onChange={(e) => setlogin(e.target.value)} className='select_login'></input>
 
-                        </div>
-
-                        <div className='ajuste'>
-                            <span className='arruma'> <span className='selectionDate'>Data: <DatePicker
-                                selected={selectedDate}
-                                onChange={(date) => { setStartDate(date) }}
-                                className="selectcalendar"
-                                id="dateselect"
-                                placeholderText={dataFormatada} />
-                            </span>
-                                <span className='selection'>Cliente:</span> <select onChange={(e) => { setclientee(e.target.value); console.log(e.target.value) }} className='select' id="motoboys">
-                                    <option  > </option>
-                                    <option value="Integrado" > 2S</option>
-                                    {client ? client.map((ref, index) => {
-                                        return (
-                                            <option key={index} value={ref.name}>{ref.name}</option>
-                                        )
-
-                                    }) : ""}
-
-                                </select>
-                            </span>
-                        </div>
                         <div className='ajuste'>
                             <span className='selection'>Código pedido:</span> <input onKeyPress={(e) => {
                                 if (e.key === "Enter") {
@@ -149,6 +92,7 @@ export default function Entrada_pedidos() {
 
                                 }
                             }} name="pedido" className='select_pedido' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })}></input>
+                            <button className='pesquisa' onClick={() => pesquisa()}>Pesquisar</button>
                         </div>
 
                         <div className='listapedidos'>
@@ -167,7 +111,7 @@ export default function Entrada_pedidos() {
                                 </thead>
 
                                 <tbody>
-                                    {tpedidos ? tpedidos.filter(ref => ref.motoboy === motoboy && ref.data === dataFormatada).map((ref, index) => {
+                                    {pedidosfiltro ? pedidosfiltro.map((ref, index) => {
 
                                         if (index % 2 == 0) {
                                             return (

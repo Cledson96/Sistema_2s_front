@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://sistema2s-api.onrender.com';
-// const BASE_URL = 'http://localhost:5000';
+// const BASE_URL = 'https://sistema2s-api.onrender.com';
+const BASE_URL = 'http://localhost:5000';
 
 export function postLogin(body) {
 
@@ -41,14 +41,26 @@ export function postCadastro_pedidos(body) {
 }
 
 export function getpedidos(body) {
+ 
+  const promise = axios.get(`${BASE_URL}/pedidos`, {
+    headers: { body }
+  });
 
-  const promise = axios.get(`${BASE_URL}/pedidos`, body);
   return promise;
 }
 
 export function deletepedido(pedido) {
-  console.log(pedido)
+
   const promise = axios.delete(`${BASE_URL}/deletapedidos`, {
+    headers: {
+      pedido
+    }
+  });
+  return promise;
+}
+export function putpedido(pedido) {
+  console.log(pedido)
+  const promise = axios.put(`${BASE_URL}/deletapedidos`, {
     headers: {
       pedido
     }

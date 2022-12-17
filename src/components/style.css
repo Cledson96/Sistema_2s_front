@@ -241,6 +241,13 @@ td {
     text-align: center;
     color: rgba(42, 44, 163, 0.925);
 }
+.forma_ausente{
+    font-family: 'Merriweather Sans', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    text-align: center;
+    color: red;
+}
 
 .entrada {
     width: 400px;
@@ -270,7 +277,7 @@ td {
     margin-top: 10px;
     align-items: center;
     display: flex;
-
+    
 }
 
 .selectionDate {
@@ -310,6 +317,8 @@ td {
 .select_pedido {
     height: 40px;
     width: 40vw;
+    margin:0;
+    margin-right: 20px;
 }
 
 .listapedidos {
@@ -322,6 +331,8 @@ td {
     overflow: scroll;
     border-radius: 10px;
     position: relative;
+    margin-top:20px;
+
 }
 
 .pedidostab {
@@ -339,4 +350,9 @@ td {
     color: white;
     font-size: 10px;
     align-items: center;
+}
+
+.pesquisa{
+   height: 40px;
+   width: 150px;
 }

@@ -4,6 +4,7 @@ import Inicio from "./components/inicio";
 import Cadastro from "./components/cadastro";
 import Cadastro_motoboy from "./components/cadastro_motoboy";
 import Entrada_pedidos from "./components/entrada_pedidos";
+import Entrada_ausentes from "./components/entrada_ausentes";
 import Motoboy from "./components/motoboy";
 import { useState } from 'react';
 import '../src/reset.css'
@@ -26,6 +27,7 @@ export default function App() {
           <Route path='/motoboys' element={<Motoboy />} /> 
           <Route path='/entrada_pedidos' element={<Entrada_pedidos />} /> 
           <Route path='/cadastrar_cliente' element={<Cadastrar_cliente />} /> 
+          <Route path='/entrada_ausente' element={<Entrada_ausentes />} /> 
         
         </Routes>
 
