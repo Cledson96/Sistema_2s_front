@@ -1,57 +1,46 @@
 
 import './style.css'
 import logo from '../img/motoboy-curitiba-logotipo.png'
-import { getmotoboys } from './requisicao'
-import { getclientes } from './requisicao'
 import { getpedidos } from './requisicao'
 import { putpedido } from './requisicao'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import "react-datepicker/dist/react-datepicker.css";
 import menu_lateral from './menu_lateral';
 import Table from 'react-bootstrap/Table'
 
-import { deletepedido } from './requisicao'
-
-
-
 export default function Entrada_ausentes() {
-    let nome = localStorage.getItem("nome_logado");
+
 
     const [carregando, setcarregando] = useState(true);
 
-    const [pesquisar, setpesquisar] = useState();
+    const [pesquisar, setpesquisar] = useState({ pedido: "" });
 
     const [tpedidos, settpedidos] = useState();
     const [pedidosfiltro, setpedidosfiltro] = useState();
 
-    useEffect(() => {
-        console.log("entrei")
-        let resposta = getpedidos()
-        resposta.then((res) => {
-            settpedidos(res.data)
-
-        });
-        resposta.catch(() => alert("Tivemos um problema para atualizar os pedidos!!"))
-    }, [carregando]);
 
 
 
     function handleForm({ value }) {
-        setpesquisar(
-            value
+        setpesquisar({
+            ...pesquisar,
+            pedido: value
+        }
+
         );
 
 
     };
     function pesquisa() {
-        let pesquisado = getpedidos(pesquisar);
-        console.log(pesquisar)
+
+        let pesquisado = getpedidos("pedido", pesquisar.pedido);
+
         pesquisado.then((ref) => {
             setpedidosfiltro(ref.data);
-            console.log(ref.data)
+
         })
-        console.log(tpedidos)
+
 
         pesquisado.catch((ref) => console.log(ref))
     }
@@ -113,7 +102,7 @@ export default function Entrada_ausentes() {
                                 <tbody>
                                     {pedidosfiltro ? pedidosfiltro.map((ref, index) => {
 
-                                        if (index % 2 == 0) {
+                                        if (index % 2 == 0 && ref.status == "ok") {
                                             return (
                                                 <tr className='par'>
                                                     <td className='pedidostab'>{index + 1}</td>
@@ -124,18 +113,18 @@ export default function Entrada_ausentes() {
                                                     <td className='pedidostab'>{ref.login}</td>
                                                     <button onClick={() => {
                                                         const confirmBox = window.confirm(
-                                                            `Tem certeza que deseja excluir o pedido ${ref.pedido} ?`
+                                                            `Tem certeza que deseja incluir o pedido ${ref.pedido} como ausente?`
                                                         )
                                                         if (confirmBox === true) {
-                                                            deletepedido(ref.pedido);
+                                                            putpedido(ref._id);
                                                             setcarregando(!carregando)
                                                         } else {
                                                             alert("não cancelei")
                                                         }
-                                                    }} className='excluir'>X</button>
+                                                    }} className='ausente_botao'>Ausente</button>
                                                 </tr>
                                             )
-                                        } else {
+                                        } else if (index % 2 != 0 && ref.status == "ok") {
                                             return (
                                                 <tr className='impar'>
                                                     <td className='pedidostab'>{index + 1}</td>
@@ -146,15 +135,16 @@ export default function Entrada_ausentes() {
                                                     <td className='pedidostab'>{ref.login}</td>
                                                     <button onClick={() => {
                                                         const confirmBox = window.confirm(
-                                                            `Tem certeza que deseja excluir o pedido ${ref.pedido} ?`
+                                                            `Tem certeza que deseja incluir o pedido ${ref.pedido} como ausente?`
                                                         )
                                                         if (confirmBox === true) {
-                                                            deletepedido(ref.pedido);
-                                                            setcarregando(!carregando)
+                                                            let pedid = putpedido(ref._id);
+                                                            pedid.then((res) => pesquisa());
+                                                            pedid.catch((res => console.log("erro" + res)))
                                                         } else {
                                                             alert("não cancelei")
                                                         }
-                                                    }} className='excluir'>X</button>
+                                                    }} className='ausente_botao'>Ausente</button>
                                                 </tr>
                                             )
 

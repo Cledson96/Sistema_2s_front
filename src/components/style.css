@@ -219,6 +219,13 @@ th {
     color: #FFFFFF;
     
 }
+.ausente{
+    background-color: red;
+    font-family: Merriweather;
+    font-weight: 800;
+    color: #FFFFFF;
+    
+}
 
 td {
     padding-top: 2px;
@@ -355,4 +362,9 @@ td {
 .pesquisa{
    height: 40px;
    width: 150px;
+}
+.ausente_botao{
+    width: 100px;
+    height: 30px;
+    background-color: red;
 }

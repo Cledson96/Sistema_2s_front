@@ -42,6 +42,13 @@ export default function Entrada_pedidos() {
         resposta.catch(() => alert("Tivemos um problema para atualizar os pedidos!!"))
     }, [carregando]);
 
+    function pedidospuxa() {
+        let resposta = getpedidos()
+        resposta.then((res) => {
+            settpedidos(res.data)
+        });
+        resposta.catch(() => alert("Tivemos um problema para atualizar os pedidos!!"))
+    }
 
 
     useEffect(() => {
@@ -78,9 +85,9 @@ export default function Entrada_pedidos() {
 
     };
     function autoriza() {
-      
-      
-        let cadastrare = { ...cadastrar, cliente: clientee,motoboy }
+
+
+        let cadastrare = { ...cadastrar, cliente: clientee, motoboy }
         console.log(cadastrare)
         let resposta = postCadastro_pedidos(cadastrare);
 
@@ -168,7 +175,29 @@ export default function Entrada_pedidos() {
 
                                 <tbody>
                                     {tpedidos ? tpedidos.filter(ref => ref.motoboy === motoboy && ref.data === dataFormatada).map((ref, index) => {
-
+                                        if (ref.status === "ausente") {
+                                            return (
+                                                <tr className='ausente'>
+                                                    <td className='pedidostab'>{index + 1}</td>
+                                                    <td className='pedidostab'>{ref.motoboy}</td>
+                                                    <td className='pedidostab'>{ref.pedido}</td>
+                                                    <td className='pedidostab'>{ref.cliente}</td>
+                                                    <td className='pedidostab'>{ref.data}</td>
+                                                    <td className='pedidostab'>{ref.login}</td>
+                                                    <button onClick={() => {
+                                                        const confirmBox = window.confirm(
+                                                            `Tem certeza que deseja excluir o pedido ${ref.pedido} ?`
+                                                        )
+                                                        if (confirmBox === true) {
+                                                            deletepedido(ref.pedido);
+                                                            setcarregando(!carregando)
+                                                        } else {
+                                                            alert("não cancelei")
+                                                        }
+                                                    }} className='excluir'>X</button>
+                                                </tr>
+                                            )
+                                        }
                                         if (index % 2 == 0) {
                                             return (
                                                 <tr className='par'>
