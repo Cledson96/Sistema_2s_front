@@ -368,3 +368,13 @@ td {
     height: 30px;
     background-color: red;
 }
+.gif{
+    width: 120px;
+    height: 90px;
+   
+}
+.Entrar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
