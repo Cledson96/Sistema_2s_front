@@ -13,6 +13,7 @@ import Table from 'react-bootstrap/Table'
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 import { deletepedido } from './requisicao'
+import { red } from '@mui/material/colors'
 
 
 
@@ -31,38 +32,35 @@ export default function Entrada_pedidos() {
     const [login, setlogin] = useState();
     const [clientee, setclientee] = useState();
     const [motoboy, setmotoboy] = useState();
-    const [tpedidos, settpedidos] = useState();
+    const [pesquisar, setpesquisar] = useState({ motoboy: "" });
+    const [rows, setrows] = useState([])
+    const [pedidosfil, setpedidosfil] = useState()
+    const [atualiza, setatualiza] = useState(true)
+    const [atualiza2, setatualiza2] = useState(true)
 
-    function pesquisa() {
+    useEffect(() => {
+        if (motoboy) {
+            let pesquisado = getpedidos("motoboy", motoboy);
 
-        let pesquisado = getpedidos("motoboy", pesquisar.pedido);
+            pesquisado.then((ref) => {
+                setpedidosfil(ref.data);
+                setatualiza(!atualiza)
 
-        pesquisado.then((ref) => {
-            tpedidos(ref.data);
+            })
+            pesquisado.catch((ref) => console.log(ref))
+        }
 
-        })
-
-
-        pesquisado.catch((ref) => console.log(ref))
-    }
-    console.log(tpedidos)
-    function pedidospuxa() {
-        let resposta = getpedidos()
-        resposta.then((res) => {
-            settpedidos(res.data)
-        });
-        resposta.catch(() => alert("Tivemos um problema para atualizar os pedidos!!"))
-    }
-
+    }, [motoboy, startDate, atualiza2]);
+    console.log(pedidosfil)
+    console.log(motoboy)
 
     useEffect(() => {
         let resposta = getmotoboys()
         resposta.then((res) => {
             setboys(res.data)
-
         });
         resposta.catch(() => alert("Tivemos um problema para atualizar os motoboys!!"))
-    }, carregando);
+    }, [carregando]);
 
     useEffect(() => {
         let resposta = getclientes()
@@ -71,10 +69,28 @@ export default function Entrada_pedidos() {
 
         });
         resposta.catch(() => alert("Tivemos um problema para atualizar os clientes!!"))
-    }, carregando);
+    }, [carregando]);
 
+    let teste
+    let ver
+
+    useEffect(() => {
+        if (pedidosfil) {
+            teste = pedidosfil.filter(ref => ref.data === dataFormatada)
+
+        }
+        if (teste) {
+            ver = teste.map((ref, index) => {
+                return ({ id: index, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status })
+
+            });
+            setrows(ver)
+        }
+
+    }, [atualiza]);
 
     function handleForm({ value, name }) {
+
         setcadastrar({
 
             data: dataFormatada,
@@ -85,19 +101,21 @@ export default function Entrada_pedidos() {
             pedido: value
 
         });
-
-
     };
+
     function handleForma({ value }) {
+        setrows(teste);
+        console.log(teste)
+        console.log(rows)
         setpesquisar({
             ...pesquisar,
             pedido: value
         }
 
         );
-
-
     };
+
+
     function autoriza() {
 
 
@@ -108,23 +126,37 @@ export default function Entrada_pedidos() {
         resposta.then((ref) => {
 
             alert("Cadastro realizado com sucesso")
-            setcarregando(!carregando)
+            setatualiza2(!atualiza2)
+            setcadastrar(({
+
+                data: dataFormatada,
+                login,
+                cliente: clientee,
+                name: nome,
+                motoboy,
+                pedido: ""
+
+            }))
 
         })
         resposta.catch((ref) => { alert(ref.response.data) })
 
-
     }
-    
-
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'Motoboy', headerName: 'Motoboy', width: 130 },
-        { field: 'Pedido', headerName: 'Pedido', width: 130 },
+        {
+            field: 'id', headerName: 'ID', width: 40, headerClassName: 'super-app-theme--header',
+            headerAlign: 'center',
+        },
+        {
+            field: 'Motoboy', headerName: 'Motoboy', width: 130, headerClassName: 'super-app-theme--header',
+            headerAlign: 'center',
+        },
+        { field: 'Pedido', headerName: 'Pedido', width: 230 },
         { field: 'Cliente', headerName: 'Cliente', width: 130 },
-        { field: 'Data', headerName: 'Data', width: 130 },
-        { field: 'login', headerName: 'login', width: 130 },
+        { field: 'Data', headerName: 'Data', width: 110 },
+        { field: 'login', headerName: 'login', width: 110 },
+        { field: 'status', headerName: 'status', width: 110 }
 
     ];
     return (
@@ -138,8 +170,8 @@ export default function Entrada_pedidos() {
                     <div className='forma'>
                         <h1 className='forma_titulo'>Entrada de pedidos</h1>
                         <div className='ajuste'>
-                            <span className='selection'>Motoboy:</span> <select onChange={(e) => { setmotoboy(e.target.value); handleForma({ name: e.target.name, value: e.target.value, }) }} className='select' id="motoboys">
-                                <option ></option>
+                            <span className='selection'>Motoboy:</span> <select onChange={(e) => { setmotoboy(e.target.value); handleForma({ name: e.target.name, value: e.target.value }) }} className='select' id="motoboys">
+                                <option ></option>pesquisa()
                                 <option value="Integrado">Entrada 2S</option>
                                 {boys ? boys.map((ref, index) => {
                                     return (
@@ -175,7 +207,7 @@ export default function Entrada_pedidos() {
                             </span>
                         </div>
                         <div className='ajuste'>
-                            <span className='selection'>Código pedido:</span> <input onKeyPress={(e) => {
+                            <span className='selection'>Código pedido:</span> <input value={cadastrar.pedido ? cadastrar.pedido : ""} onKeyPress={(e) => {
                                 if (e.key === "Enter") {
                                     autoriza()
 
@@ -184,19 +216,22 @@ export default function Entrada_pedidos() {
                         </div>
 
                         <div className='listapedidos'>
-                            {tpedidos ? <div style={{ height: 400, width: '100%' }}>
+                            {pedidosfil ? <div style={{ height: 400, width: '100%' }}>
                                 <DataGrid
-                                    rows={[ tpedidos.map((ref, index) => {
-                                        { id: index, Motoboy: "motoboy", pedido: "ref.pedido", Cliente: "ref.cliente", Data: "ref.data", login: "ref.login" }
-                                
-                                    })]}
+                                    rows={rows ? rows : []}
                                     columns={columns}
                                     pageSize={5}
                                     rowsPerPageOptions={[5]}
                                     checkboxSelection
+                                    components={{
+                                        ColumnMenu: red,
+                                    }}
+                                    componentsProps={{
+                                        columnMenu: { background: 'red', counter: rows.length },
+                                    }}
                                 />
-                            </div> : <></> }
-                           
+                            </div> : <></>}
+
 
                             {/* <Table >
 

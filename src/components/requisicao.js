@@ -50,6 +50,7 @@ console.log(filtro)
   });
 
   return promise;
+ 
 }
 
 export function deletepedido(pedido) {

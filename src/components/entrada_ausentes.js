@@ -21,7 +21,6 @@ export default function Entrada_ausentes() {
 
 
 
-
     function handleForm({ value }) {
         setpesquisar({
             ...pesquisar,
@@ -29,7 +28,6 @@ export default function Entrada_ausentes() {
         }
 
         );
-
 
     };
     function pesquisa() {
