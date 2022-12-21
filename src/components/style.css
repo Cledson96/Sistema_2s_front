@@ -217,15 +217,10 @@ th {
     font-family: Merriweather;
     font-weight: 800;
     color: #FFFFFF;
-    
+
 }
-.ausente{
-    background-color: red;
-    font-family: Merriweather;
-    font-weight: 800;
-    color: #FFFFFF;
-    
-}
+
+
 
 td {
     padding-top: 2px;
@@ -235,8 +230,8 @@ td {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 90%;
-    background-color: rgba(199, 191, 191, 0.801);
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.747);
     border-radius: 30px;
     margin-right: 10px;
 }
@@ -248,7 +243,8 @@ td {
     text-align: center;
     color: rgba(42, 44, 163, 0.925);
 }
-.forma_ausente{
+
+.forma_ausente {
     font-family: 'Merriweather Sans', sans-serif;
     font-size: 40px;
     font-weight: 800;
@@ -277,14 +273,45 @@ td {
     font-size: 17px;
     align-items: center;
     text-align: center;
-
+    display: flex;
 }
 
 .ajuste {
     margin-top: 10px;
     align-items: center;
     display: flex;
-    
+
+}
+
+.apagar {
+    background-color: red;
+    height: 46px;
+    width: 7vw;
+    font-size: 15px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-left: 15px;
+}
+
+.cadastrar {
+    height: 46px;
+    width: 7vw;
+    font-size: 15px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.ausentar {
+    background-color: orange;
+    height: 46px;
+    width: 7vw;
+    font-size: 15px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-left: 15px;
 }
 
 .selectionDate {
@@ -296,6 +323,8 @@ td {
     display: flex;
     align-items: center;
     max-width: 25vw;
+    justify-content: center;
+    text-align: center;
 }
 
 .select_login {
@@ -324,21 +353,19 @@ td {
 .select_pedido {
     height: 40px;
     width: 40vw;
-    margin:0;
+    margin: 0;
     margin-right: 20px;
 }
 
 .listapedidos {
     margin-left: auto;
     margin-right: auto;
-    border-style: solid;
-    border-width: 3px;
-    width: 90%;
-    height: 60%;
+    width: 100%;
+    height: 100%;
     overflow: scroll;
     border-radius: 10px;
     position: relative;
-    margin-top:20px;
+    margin-top: 20px;
 
 }
 
@@ -359,21 +386,41 @@ td {
     align-items: center;
 }
 
-.pesquisa{
-   height: 40px;
-   width: 150px;
+.pesquisa {
+    height: 40px;
+    width: 150px;
 }
-.ausente_botao{
+.ausente {
+    height: 40px;
+    width: 150px;
+    background-color: orange;
+    font-family: Merriweather;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-left: 15px;
+
+}
+
+.titulo{
+    font-family: 'Merriweather Sans', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    text-align: center;
+    color: rgb(25, 0, 255);
+}
+.ausente_botao {
     width: 100px;
     height: 30px;
     background-color: red;
 }
-.gif{
+
+.gif {
     width: 120px;
     height: 90px;
-   
+
 }
-.Entrar{
+
+.Entrar {
     display: flex;
     align-items: center;
     justify-content: center;

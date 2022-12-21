@@ -9,23 +9,15 @@ import { useEffect, useState } from 'react'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import menu_lateral from './menu_lateral';
-import Table from 'react-bootstrap/Table'
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { deletepedido } from './requisicao'
-import { red } from '@mui/material/colors'
-
-
 
 export default function Entrada_pedidos() {
     let nome = localStorage.getItem("nome_logado");
 
     const [selectedDate, setselectedDate] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
-
     let dataFormatada = ((startDate.getDate()) + "/" + ((startDate.getMonth() + 1)) + "/" + startDate.getFullYear());
-
-    const [carregando, setcarregando] = useState(true);
     const [boys, setboys] = useState([]);
     const [client, setclient] = useState([]);
     const [cadastrar, setcadastrar] = useState({});
@@ -37,6 +29,9 @@ export default function Entrada_pedidos() {
     const [pedidosfil, setpedidosfil] = useState()
     const [atualiza, setatualiza] = useState(true)
     const [atualiza2, setatualiza2] = useState(true)
+    const [selectionModel, setSelectionModel] = useState([]);
+    const [deletar, setdeletar] = useState([])
+
 
     useEffect(() => {
         if (motoboy) {
@@ -51,8 +46,7 @@ export default function Entrada_pedidos() {
         }
 
     }, [motoboy, startDate, atualiza2]);
-    console.log(pedidosfil)
-    console.log(motoboy)
+
 
     useEffect(() => {
         let resposta = getmotoboys()
@@ -60,7 +54,7 @@ export default function Entrada_pedidos() {
             setboys(res.data)
         });
         resposta.catch(() => alert("Tivemos um problema para atualizar os motoboys!!"))
-    }, [carregando]);
+    }, []);
 
     useEffect(() => {
         let resposta = getclientes()
@@ -69,7 +63,7 @@ export default function Entrada_pedidos() {
 
         });
         resposta.catch(() => alert("Tivemos um problema para atualizar os clientes!!"))
-    }, [carregando]);
+    }, []);
 
     let teste
     let ver
@@ -77,11 +71,10 @@ export default function Entrada_pedidos() {
     useEffect(() => {
         if (pedidosfil) {
             teste = pedidosfil.filter(ref => ref.data === dataFormatada)
-
         }
         if (teste) {
             ver = teste.map((ref, index) => {
-                return ({ id: index, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status })
+                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status, ide: ref._id })
 
             });
             setrows(ver)
@@ -105,8 +98,7 @@ export default function Entrada_pedidos() {
 
     function handleForma({ value }) {
         setrows(teste);
-        console.log(teste)
-        console.log(rows)
+
         setpesquisar({
             ...pesquisar,
             pedido: value
@@ -120,13 +112,11 @@ export default function Entrada_pedidos() {
 
 
         let cadastrare = { ...cadastrar, cliente: clientee, motoboy }
-        console.log(cadastrare)
+
         let resposta = postCadastro_pedidos(cadastrare);
 
         resposta.then((ref) => {
 
-            alert("Cadastro realizado com sucesso")
-            setatualiza2(!atualiza2)
             setcadastrar(({
 
                 data: dataFormatada,
@@ -137,28 +127,42 @@ export default function Entrada_pedidos() {
                 pedido: ""
 
             }))
-
+            setatualiza2(!atualiza2)
         })
         resposta.catch((ref) => { alert(ref.response.data) })
 
     }
 
     const columns: GridColDef[] = [
-        {
-            field: 'id', headerName: 'ID', width: 40, headerClassName: 'super-app-theme--header',
-            headerAlign: 'center',
-        },
-        {
-            field: 'Motoboy', headerName: 'Motoboy', width: 130, headerClassName: 'super-app-theme--header',
-            headerAlign: 'center',
-        },
-        { field: 'Pedido', headerName: 'Pedido', width: 230 },
-        { field: 'Cliente', headerName: 'Cliente', width: 130 },
+        { field: 'id', headerName: 'ID', width: 40, },
+        { field: 'Motoboy', headerName: 'Motoboy', width: 150 },
+        { field: 'Pedido', headerName: 'Pedido', width: 260, },
+        { field: 'Cliente', headerName: 'Cliente', width: 150 },
         { field: 'Data', headerName: 'Data', width: 110 },
-        { field: 'login', headerName: 'login', width: 110 },
-        { field: 'status', headerName: 'status', width: 110 }
+        { field: 'login', headerName: 'login', width: 150 },
+        { field: 'status', headerName: 'status', width: 110 },
 
     ];
+
+
+    function array(id) {
+        setdeletar([])
+
+        let prepara = []
+        for (let i = 0; i < id.length; i++) {
+            prepara.push(rows[[id[i] - 1]])
+        }
+        setdeletar(prepara)
+
+    }
+    function deletavarios() {
+
+        let excluir = deletar.map((ref) => { return { id: ref.ide } })
+
+        let apagou = deletepedido(excluir);
+        apagou.then(setatualiza2(!atualiza2))
+
+    }
     return (
         <div className="sistema">
             <div className="header">
@@ -186,14 +190,10 @@ export default function Entrada_pedidos() {
                         </div>
 
                         <div className='ajuste'>
-                            <span className='arruma'> <span className='selectionDate'>Data: <DatePicker
-                                selected={selectedDate}
-                                onChange={(date) => { setStartDate(date) }}
-                                className="selectcalendar"
-                                id="dateselect"
-                                placeholderText={dataFormatada} />
-                            </span>
-                                <span className='selection'>Cliente:</span> <select onChange={(e) => { setclientee(e.target.value); console.log(e.target.value) }} className='select' id="motoboys">
+                            <span className='arruma'>
+
+                                <span className='selection'>Cliente:</span>
+                                <select onChange={(e) => { setclientee(e.target.value); console.log(e.target.value) }} className='select' id="motoboys">
                                     <option  > </option>
                                     <option value="Integrado" > 2S</option>
                                     {client ? client.map((ref, index) => {
@@ -204,7 +204,17 @@ export default function Entrada_pedidos() {
                                     }) : ""}
 
                                 </select>
+
+                                <span className='selectionDate'>Data: <DatePicker
+                                    selected={selectedDate}
+                                    onChange={(date) => { setStartDate(date) }}
+                                    className="selectcalendar"
+                                    id="dateselect"
+                                    placeholderText={dataFormatada} />
+                                </span>
                             </span>
+
+
                         </div>
                         <div className='ajuste'>
                             <span className='selection'>Código pedido:</span> <input value={cadastrar.pedido ? cadastrar.pedido : ""} onKeyPress={(e) => {
@@ -213,119 +223,42 @@ export default function Entrada_pedidos() {
 
                                 }
                             }} name="pedido" className='select_pedido' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })}></input>
+                            <button className='cadastrar' onClick={() => { autoriza() }}> Cadastrar </button>
+                            <button className='apagar' onClick={() => {
+                                let nomes = deletar.map((ref) => { return ref.pedido })
+                                const confirmBox = window.confirm(
+                                    `Tem certeza que deseja excluir os pedidos selecionados?  ?`
+                                )
+                                if (confirmBox === true) {
+                                    deletavarios(nomes)
+                                }
+
+                            }}> Deletar </button>
                         </div>
 
                         <div className='listapedidos'>
-                            {pedidosfil ? <div style={{ height: 400, width: '100%' }}>
+                            {pedidosfil ? <div style={{ height: "100%", width: '100%' }}>
                                 <DataGrid
                                     rows={rows ? rows : []}
                                     columns={columns}
-                                    pageSize={5}
+                                    pageSize={7}
                                     rowsPerPageOptions={[5]}
                                     checkboxSelection
-                                    components={{
-                                        ColumnMenu: red,
+                                    sx={{
+                                        color: 'black', background: "rgba(173,216,230,0.80)", borderColor: 'grey',
+                                        '& .MuiDataGrid-cell:hover': {
+                                            color: 'primary.main',
+                                        }
                                     }}
-                                    componentsProps={{
-                                        columnMenu: { background: 'red', counter: rows.length },
+                                    onSelectionModelChange={(ids) => {
+                                        console.log(ids)
+                                        array(ids)
+                                        setSelectionModel(ids);
+                                        console.log(selectionModel)
                                     }}
+
                                 />
                             </div> : <></>}
-
-
-                            {/* <Table >
-
-                                <thead >
-                                    <tr className='pedidostopo'>
-                                        <th>#</th>
-                                        <th>Motoboy</th>
-                                        <th>Pedido</th>
-                                        <th>Cliente</th>
-                                        <th>Data</th>
-                                        <th>login</th>
-
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    {tpedidos ? tpedidos.filter(ref => ref.motoboy === motoboy && ref.data === dataFormatada).map((ref, index) => {
-                                        if (ref.status === "ausente") {
-                                            return (
-                                                <tr className='ausente'>
-                                                    <td className='pedidostab'>{index + 1}</td>
-                                                    <td className='pedidostab'>{ref.motoboy}</td>
-                                                    <td className='pedidostab'>{ref.pedido}</td>
-                                                    <td className='pedidostab'>{ref.cliente}</td>
-                                                    <td className='pedidostab'>{ref.data}</td>
-                                                    <td className='pedidostab'>{ref.login}</td>
-                                                    <button onClick={() => {
-                                                        const confirmBox = window.confirm(
-                                                            `Tem certeza que deseja excluir o pedido ${ref.pedido} ?`
-                                                        )
-                                                        if (confirmBox === true) {
-                                                            deletepedido(ref.pedido);
-                                                            setcarregando(!carregando)
-                                                        } else {
-                                                            alert("não cancelei")
-                                                        }
-                                                    }} className='excluir'>X</button>
-                                                </tr>
-                                            )
-                                        }
-                                        if (index % 2 == 0) {
-                                            return (
-                                                <tr className='par'>
-                                                    <td className='pedidostab'>{index + 1}</td>
-                                                    <td className='pedidostab'>{ref.motoboy}</td>
-                                                    <td className='pedidostab'>{ref.pedido}</td>
-                                                    <td className='pedidostab'>{ref.cliente}</td>
-                                                    <td className='pedidostab'>{ref.data}</td>
-                                                    <td className='pedidostab'>{ref.login}</td>
-                                                    <button onClick={() => {
-                                                        const confirmBox = window.confirm(
-                                                            `Tem certeza que deseja excluir o pedido ${ref.pedido} ?`
-                                                        )
-                                                        if (confirmBox === true) {
-                                                            deletepedido(ref.pedido);
-                                                            setcarregando(!carregando)
-                                                        } else {
-                                                            alert("não cancelei")
-                                                        }
-                                                    }} className='excluir'>X</button>
-                                                </tr>
-                                            )
-                                        } else {
-                                            return (
-                                                <tr className='impar'>
-                                                    <td className='pedidostab'>{index + 1}</td>
-                                                    <td className='pedidostab'>{ref.motoboy}</td>
-                                                    <td className='pedidostab'>{ref.pedido}</td>
-                                                    <td className='pedidostab'>{ref.cliente}</td>
-                                                    <td className='pedidostab'>{ref.data}</td>
-                                                    <td className='pedidostab'>{ref.login}</td>
-                                                    <button onClick={() => {
-                                                        const confirmBox = window.confirm(
-                                                            `Tem certeza que deseja excluir o pedido ${ref.pedido} ?`
-                                                        )
-                                                        if (confirmBox === true) {
-                                                            deletepedido(ref.pedido);
-                                                            setcarregando(!carregando)
-                                                        } else {
-                                                            alert("não cancelei")
-                                                        }
-                                                    }} className='excluir'>X</button>
-                                                </tr>
-                                            )
-
-                                        }
-
-                                    }) : <></>}
-
-
-                                </tbody>
-
-                            </Table> */}
-
                         </div>
                     </div>
 

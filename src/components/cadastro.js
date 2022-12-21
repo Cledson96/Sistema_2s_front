@@ -6,7 +6,7 @@ import logo from '../img/motoboy-curitiba-logotipo.png'
 
 export default function Cadastro() {
     const [cadastrar, setcadastrar] = useState({});
-    const [carregando, setcarregando] = useState([]);
+    const [carregando, setcarregando] = useState(true);
     const [confirmasenha, setconfirmasenha] = useState([]);
     const navigate = useNavigate();
 
@@ -25,9 +25,9 @@ export default function Cadastro() {
 
     }
     function autoriza() {
-        setcarregando(["referencia"])
+        setcarregando(!carregando)
         let resposta = postCadastro(cadastrar);
-        if (cadastrar.password != confirmasenha.passwordconfirm) {
+        if (cadastrar.password !== confirmasenha.passwordconfirm) {
             return alert("As senhas precisam ser iguais!!")
         }
         resposta.then((ref) => {

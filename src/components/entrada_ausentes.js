@@ -3,22 +3,20 @@ import './style.css'
 import logo from '../img/motoboy-curitiba-logotipo.png'
 import { getpedidos } from './requisicao'
 import { putpedido } from './requisicao'
-import { useState } from 'react'
-
+import { useState, useEffect } from 'react'
 import "react-datepicker/dist/react-datepicker.css";
 import menu_lateral from './menu_lateral';
-import Table from 'react-bootstrap/Table'
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 export default function Entrada_ausentes() {
 
 
     const [carregando, setcarregando] = useState(true);
-
     const [pesquisar, setpesquisar] = useState({ pedido: "" });
-
-    const [tpedidos, settpedidos] = useState();
     const [pedidosfiltro, setpedidosfiltro] = useState();
-
+    const [rows, setrows] = useState([])
+    const [selectionModel, setSelectionModel] = useState([]);
+    const [atualiza, setatualiza] = useState(true);
 
 
     function handleForm({ value }) {
@@ -30,34 +28,55 @@ export default function Entrada_ausentes() {
         );
 
     };
+
     function pesquisa() {
-
         let pesquisado = getpedidos("pedido", pesquisar.pedido);
-
         pesquisado.then((ref) => {
             setpedidosfiltro(ref.data);
-
+            setatualiza(!atualiza)
         })
-
-
         pesquisado.catch((ref) => console.log(ref))
+
     }
+
+    useEffect(() => {
+        let ver
+        if (pedidosfiltro) {
+            ver = pedidosfiltro.map((ref, index) => {
+                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status, ide: ref._id })
+
+            });
+            setrows(ver)
+        }
+
+    }, [atualiza,pedidosfiltro]);
+
     function autoriza() {
 
-
-        let resposta = putpedido(pesquisar);
+        let resposta = putpedido(pedidosfiltro ? pedidosfiltro[selectionModel - 1]._id : "");
 
 
         resposta.then((ref) => {
 
             alert("Ausente cadastrado com sucesso")
+            pesquisa()
             setcarregando(!carregando)
 
         })
         resposta.catch((ref) => { alert(ref.response.data) })
 
-
     }
+
+    const columns: GridColDef[] = [
+        { field: 'id', headerName: 'ID', width: 40, },
+        { field: 'Motoboy', headerName: 'Motoboy', width: 150 },
+        { field: 'Pedido', headerName: 'Pedido', width: 260, },
+        { field: 'Cliente', headerName: 'Cliente', width: 150 },
+        { field: 'Data', headerName: 'Data', width: 110 },
+        { field: 'login', headerName: 'login', width: 150 },
+        { field: 'status', headerName: 'status', width: 110 },
+
+    ];
 
     return (
         <div className="sistema">
@@ -80,81 +99,37 @@ export default function Entrada_ausentes() {
                                 }
                             }} name="pedido" className='select_pedido' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })}></input>
                             <button className='pesquisa' onClick={() => pesquisa()}>Pesquisar</button>
+                            <button className='ausente' onClick={() => {
+                                if (selectionModel.length > 1) {
+                                    alert("Tem que selecionar somente um pedido!!")
+                                } else if (selectionModel.length !== 1) {
+                                    alert("Obrigatório selecionar um pedido!!")
+                                } else {
+                                    autoriza()
+                                }
+                            }}>Ausente</button>
                         </div>
 
                         <div className='listapedidos'>
-                            <Table >
-
-                                <thead >
-                                    <tr className='pedidostopo'>
-                                        <th>#</th>
-                                        <th>Motoboy</th>
-                                        <th>Pedido</th>
-                                        <th>Cliente</th>
-                                        <th>Data</th>
-                                        <th>login</th>
-
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    {pedidosfiltro ? pedidosfiltro.map((ref, index) => {
-
-                                        if (index % 2 == 0 && ref.status == "ok") {
-                                            return (
-                                                <tr className='par'>
-                                                    <td className='pedidostab'>{index + 1}</td>
-                                                    <td className='pedidostab'>{ref.motoboy}</td>
-                                                    <td className='pedidostab'>{ref.pedido}</td>
-                                                    <td className='pedidostab'>{ref.cliente}</td>
-                                                    <td className='pedidostab'>{ref.data}</td>
-                                                    <td className='pedidostab'>{ref.login}</td>
-                                                    <button onClick={() => {
-                                                        const confirmBox = window.confirm(
-                                                            `Tem certeza que deseja incluir o pedido ${ref.pedido} como ausente?`
-                                                        )
-                                                        if (confirmBox === true) {
-                                                            putpedido(ref._id);
-                                                            setcarregando(!carregando)
-                                                        } else {
-                                                            alert("não cancelei")
-                                                        }
-                                                    }} className='ausente_botao'>Ausente</button>
-                                                </tr>
-                                            )
-                                        } else if (index % 2 != 0 && ref.status == "ok") {
-                                            return (
-                                                <tr className='impar'>
-                                                    <td className='pedidostab'>{index + 1}</td>
-                                                    <td className='pedidostab'>{ref.motoboy}</td>
-                                                    <td className='pedidostab'>{ref.pedido}</td>
-                                                    <td className='pedidostab'>{ref.cliente}</td>
-                                                    <td className='pedidostab'>{ref.data}</td>
-                                                    <td className='pedidostab'>{ref.login}</td>
-                                                    <button onClick={() => {
-                                                        const confirmBox = window.confirm(
-                                                            `Tem certeza que deseja incluir o pedido ${ref.pedido} como ausente?`
-                                                        )
-                                                        if (confirmBox === true) {
-                                                            let pedid = putpedido(ref._id);
-                                                            pedid.then((res) => pesquisa());
-                                                            pedid.catch((res => console.log("erro" + res)))
-                                                        } else {
-                                                            alert("não cancelei")
-                                                        }
-                                                    }} className='ausente_botao'>Ausente</button>
-                                                </tr>
-                                            )
-
-                                        }
-
-                                    }) : <></>}
+                            <DataGrid
+                                rows={rows}
+                                columns={columns}
+                                pageSize={7}
+                                rowsPerPageOptions={[5]}
+                                checkboxSelection={true}
+                                disableMultipleSelection={true}
+                                sx={{
+                                    color: 'black', background: "rgba(173,216,230,0.80)", borderColor: 'grey',
+                                    '& .MuiDataGrid-cell:hover': {
+                                        color: 'primary.main',
+                                    }
+                                }}
+                                onSelectionModelChange={(ids) => {
+                                    setSelectionModel(ids);
 
 
-                                </tbody>
-
-                            </Table>
-
+                                }}
+                            />
                         </div>
                     </div>
 

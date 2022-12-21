@@ -1,91 +1,72 @@
-import { Link } from 'react-router-dom'
+
 import './style.css'
 import logo from '../img/motoboy-curitiba-logotipo.png'
-import Table from 'react-bootstrap/Table'
 import { getmotoboys } from './requisicao'
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react'
 import menu_lateral from './menu_lateral';
-
-
-
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 export default function Motoboy() {
-    let nome = localStorage.getItem("nome_logado");
-    const [carregando, setcarregando] = useState([]);
-    const [boys, setboys] = useState([])
+
+    const [rows, setrows] = useState([])
+
     useEffect(() => {
+        let ver
         let resposta = getmotoboys()
         resposta.then((res) => {
-            setboys(res.data)
+            ver = res.data.map((ref, index) => {
+                return ({ id: index + 1, Nome: ref.name, Email: ref.email, Celular: ref.celular_principal, Telefone: ref.telefone_recado, Endereço: ref.endereco, CPF: ref.cpf, CNPJ: ref.mei })
 
+            });
+            setrows(ver)
         });
         resposta.catch(() => alert("Tivemos um problema para atualizar os motoboys!!"))
-    }, carregando);
-    console.log(boys)
+
+    }, [rows]);
+
+    
+        const columns: GridColDef[] = [
+        { field: 'id', headerName: 'ID', width: 40, },
+        { field: 'Nome', headerName: 'Nome', width: 150 },
+        { field: 'Email', headerName: 'Email', width: 150, },
+        { field: 'Celular', headerName: 'Celular Principal', width: 150 },
+        { field: 'Telefone', headerName: 'Telefone de recado', width: 150 },
+        { field: 'Endereço', headerName: 'Endereço', width: 250 },
+        { field: 'CPF', headerName: 'CPF', width: 120 },
+        { field: 'CNPJ', headerName: 'CNPJ', width: 160 },
+
+    ];
+
     return (
         <div className="sistema">
             <div className="header">
                 <img className='logo_inicio' alt='' src={logo} />
             </div>
             <div className='fundo_inicio'>
-               {menu_lateral()}
-                <div className="lista_motoboys">
-                    <div className='tabela'>
+                {menu_lateral()}
+                <div className="inicio">
+                    <div className='forma'>
+                        <h1 className='titulo'>Motoboys cadastrados</h1>
 
-                        <Table >
-
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nome</th>
-                                    <th>Email</th>
-                                    <th>Celular Principal</th>
-                                    <th>Telefone de recado</th>
-                                    <th>Endereço</th>
-                                    <th>CPF</th>
-                                    <th>CNPJ</th>
-                                </tr>
-                            </thead>
-                            <br></br>
-                            <tbody>
-                                {boys.map((ref, index) => {
-                                    if (index % 2 == 0) {
-                                        return (
-                                            <tr className='par'>
-                                                <td>{index + 1}</td>
-                                                <td>{ref.name}</td>
-                                                <td>{ref.email}</td>
-                                                <td>{ref.celular_principal}</td>
-                                                <td>{ref.telefone_recado}</td>
-                                                <td>{ref.endereco}</td>
-                                                <td>{ref.cpf}</td>
-                                                <td>{ref.mei}</td>
-                                            </tr>
-                                        )
-                                    } else {
-                                        return (
-                                            <tr className='impar'>
-                                                <td>{index + 1}</td>
-                                                <td>{ref.name}</td>
-                                                <td>{ref.email}</td>
-                                                <td>{ref.celular_principal}</td>
-                                                <td>{ref.telefone_recado}</td>
-                                                <td>{ref.endereco}</td>
-                                                <td>{ref.cpf}</td>
-                                                <td>{ref.mei}</td>
-                                            </tr>
-                                        )
-
+                        <div className='listapedidos'>
+                            <DataGrid
+                                rows={rows}
+                                columns={columns}
+                                pageSize={7}
+                                rowsPerPageOptions={[5]}
+                                checkboxSelection={false}
+                                disableMultipleSelection={true}
+                                sx={{
+                                    color: 'black', background: "rgba(173,216,230,0.80)", borderColor: 'grey',
+                                    '& .MuiDataGrid-cell:hover': {
+                                        color: 'primary.main',
                                     }
-
-                                })}
-
-
-                            </tbody>
-
-                        </Table>
-
+                                }}
+                              
+                            />
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>

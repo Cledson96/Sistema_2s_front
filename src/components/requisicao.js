@@ -56,7 +56,7 @@ console.log(filtro)
 export function deletepedido(pedido) {
 
   const promise = axios.delete(`${BASE_URL}/deletapedidos`, {
-    headers: {
+    data: {
       pedido
     }
   });
