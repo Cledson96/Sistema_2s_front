@@ -42,28 +42,34 @@ export default function Cadastro() {
     }
     return (
         <div className='sistema'>
-             <div className="header">
+            <div className="header">
                 <img className='logo_inicio' alt='' src={logo} />
             </div>
-             <div className='fundo_inicio'>
-            {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
-            <div className="inicio">
-            <div className='forma'>
-            <h1 className='titulos'> Cadastro de login</h1>
-            <input name="name" type="text" placeholder='Nome' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
-            <input name="email" type="email" placeholder='E-mail' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
-            <input name="password" type="password" placeholder='Senha' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
-            <input name="passwordconfirm" type="password" placeholder='Confirme a senha' onChange={(e) => senhac({ name: e.target.name, value: e.target.value, })} />
-            <button onClick={autoriza} className='Entrar'>Cadastrar</button>
+            <div className='fundo_inicio'>
+                {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
+                <div className="inicio">
+                    <div className='forma cadastro'>
+                        <h1 className='titulos'> Cadastro de login</h1>
+                        <span>
+                            <input name="name" type="text" placeholder='Nome' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
+                            <input name="email" type="email" placeholder='E-mail' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
+                        </span>
+                        <span>
+                            <input name="password" type="password" placeholder='Senha' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
+                            <input name="passwordconfirm" type="password" placeholder='Confirme a senha' onChange={(e) => senhac({ name: e.target.name, value: e.target.value, })} />
+                        </span>
 
-            <Link className='link' to={'/inicio'}><button className='voltar'>Voltar</button></Link>
+
+                        <button onClick={autoriza} className='Entrar'>Cadastrar</button>
+
+                        <Link className='link' to={'/inicio'}><button className='voltar'>Voltar</button></Link>
+                    </div>
+
+                </div>
+
             </div>
-            
-            </div>
-           
         </div>
-        </div>
-       
+
 
     )
 }

@@ -456,10 +456,28 @@ td {
     border: none;
     position: absolute;
     right: 5px;
-    top:5px
+    top: 5px
 }
 
 .volte1 {
     width: 100%;
     height: 100%;
+}
+
+.cadastro {
+    align-items: center;
+    
+}
+
+.titulos {
+    font-family: 'Merriweather Sans', sans-serif;
+    font-size: 40px;
+}
+.cadastro input{
+    margin-right: 35px;
+
+}
+.endereco{
+    max-width: 160vw;
+    width: 700px;
 }

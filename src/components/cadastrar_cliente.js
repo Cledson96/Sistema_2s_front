@@ -3,10 +3,13 @@ import { postCadastro_cliente } from './requisicao'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import logo from '../img/motoboy-curitiba-logotipo.png'
+import menu_lateral from './menu_lateral';
+import menu from '../img/menu.png'
 
 export default function Cadastrar_cliente() {
     const [cadastrar, setcadastrar] = useState({});
     const [carregando, setcarregando] = useState(true);
+    const [menuon, setmenuon] = useState(false)
     const navigate = useNavigate();
 
 
@@ -29,19 +32,36 @@ export default function Cadastrar_cliente() {
 
     }
     return (
-        <div className='fundo'>
+        <div className='sistema'>
+            <div className="header">
+                <img className='logo_inicio' alt='' src={logo} />
+            </div>
+            <div className='fundo_inicio'>
+                {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
+                <div className="inicio">
+                    <div className='forma cadastro'>
+                        <h1 className='titulos'> Cadastro de clientes</h1>
+                        <span>
+                            <input name="name" type="text" placeholder='Nome' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
+                            <input name="email" type="email" placeholder='E-mail' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
+                        </span>
+                        <span>
+                            <input name="celular" type="number" placeholder='Celular' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
+                            <input name="telefone" type="number" placeholder='Telefone' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
+                        </span>
 
-            <img className='logo_img' alt='' src={logo} />
 
-            <input name="name" type="text" placeholder='Nome cliente' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
-            <input name="email" type="email" placeholder='E-mail' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
-            <input name="celular" type="number" placeholder='Celular' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
-            <input name="telefone" type="number" placeholder='Telefone' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
-           
-            <button onClick={autoriza} className='Entrar'>Cadastrar </button>
+                        <button onClick={autoriza} className='Entrar'>Cadastrar</button>
 
-            <Link className='link' to={'/inicio'}><button className='voltar'>Voltar</button></Link>
+                        <Link className='link' to={'/inicio'}><button className='voltar'>Voltar</button></Link>
+                    </div>
+
+                </div>
+
+            </div>
         </div>
+
+
 
     )
 }
