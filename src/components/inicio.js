@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom'
 import { getmotoboys } from './requisicao'
 import { useEffect, useState } from 'react';
 import menu_lateral from './menu_lateral';
+import menu from '../img/menu.png'
 
 
 export default function Inicio({ setdados }) {
     const [carregando, setcarregando] = useState([]);
     const [boys, setboys] = useState([])
+    const [menuon,setmenuon] = useState(false)
    
 
     useEffect(() => {
@@ -26,7 +28,7 @@ export default function Inicio({ setdados }) {
                 <img className='logo_inicio' alt='' src={logo} />
             </div>
             <div className='fundo_inicio'>
-                {menu_lateral()}              
+                {menuon == true? menu_lateral(setmenuon) : <button onClick={()=> setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}              
                 <div className="inicio">
                     <Link className="link" to={'/motoboys'}>
                         <div className="motoboys">

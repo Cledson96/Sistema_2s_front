@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
-export default function menu_lateral() {
+import voltar from "../img/voltar.png"
+
+export default function menu_lateral(setmenuon) {
     let nome = localStorage.getItem("nome_logado");
     return (
         <div className='menu_lateral'>
-            <h1 className='logado'> Logado: {nome ? nome : ""}</h1>
+           <button onClick={()=> setmenuon(false)} className='volte'><img className='volte1'  alt='voltar' src={voltar}/></button> 
             <ul>
                 <Link className="link" to={'/inicio'}> <li> Tela inicial</li></Link>
                 <Link className="link" to={'/cadastro'}><li> Cadastrar usuario</li></Link>

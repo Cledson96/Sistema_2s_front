@@ -3,11 +3,14 @@ import { postCadastro } from './requisicao'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import logo from '../img/motoboy-curitiba-logotipo.png'
+import menu_lateral from './menu_lateral';
+import menu from '../img/menu.png'
 
 export default function Cadastro() {
     const [cadastrar, setcadastrar] = useState({});
     const [carregando, setcarregando] = useState(true);
     const [confirmasenha, setconfirmasenha] = useState([]);
+    const [menuon, setmenuon] = useState(false)
     const navigate = useNavigate();
 
 
@@ -34,14 +37,19 @@ export default function Cadastro() {
             alert("Cadastro realizado com sucesso")
             navigate('/inicio')
         })
-        resposta.catch((ref) => { alert(ref.response.data)})
+        resposta.catch((ref) => { alert(ref.response.data) })
 
     }
     return (
-        <div className='fundo'>
-
-            <img className='logo_img' alt='' src={logo} />
-
+        <div className='sistema'>
+             <div className="header">
+                <img className='logo_inicio' alt='' src={logo} />
+            </div>
+             <div className='fundo_inicio'>
+            {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
+            <div className="inicio">
+            <div className='forma'>
+            <h1 className='titulos'> Cadastro de login</h1>
             <input name="name" type="text" placeholder='Nome' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
             <input name="email" type="email" placeholder='E-mail' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
             <input name="password" type="password" placeholder='Senha' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
@@ -49,7 +57,13 @@ export default function Cadastro() {
             <button onClick={autoriza} className='Entrar'>Cadastrar</button>
 
             <Link className='link' to={'/inicio'}><button className='voltar'>Voltar</button></Link>
+            </div>
+            
+            </div>
+           
         </div>
+        </div>
+       
 
     )
 }
