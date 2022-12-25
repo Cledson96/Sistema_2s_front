@@ -5,10 +5,12 @@ import { getmotoboys } from './requisicao'
 import { useState, useEffect } from 'react'
 import menu_lateral from './menu_lateral';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import menu from '../img/menu.png'
 
 export default function Motoboy() {
 
     const [rows, setrows] = useState([])
+    const [menuon, setmenuon] = useState(false)
 
     useEffect(() => {
         let ver
@@ -43,7 +45,7 @@ export default function Motoboy() {
                 <img className='logo_inicio' alt='' src={logo} />
             </div>
             <div className='fundo_inicio'>
-                {menu_lateral()}
+            {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
                 <div className="inicio">
                     <div className='forma'>
                         <h1 className='titulo'>Motoboys cadastrados</h1>
