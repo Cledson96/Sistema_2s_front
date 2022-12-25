@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import "react-datepicker/dist/react-datepicker.css";
 import menu_lateral from './menu_lateral';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import menu from '../img/menu.png'  
 
 export default function Entrada_ausentes() {
 
@@ -17,6 +18,7 @@ export default function Entrada_ausentes() {
     const [rows, setrows] = useState([])
     const [selectionModel, setSelectionModel] = useState([]);
     const [atualiza, setatualiza] = useState(true);
+    const [menuon, setmenuon] = useState(false);
 
 
     function handleForm({ value }) {
@@ -84,7 +86,7 @@ export default function Entrada_ausentes() {
                 <img className='logo_inicio' alt='' src={logo} />
             </div>
             <div className='fundo_inicio'>
-                {menu_lateral()}
+            {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
                 <div className="inicio">
                     <div className='forma'>
                         <h1 className='forma_ausente'>Entrada de ausentes</h1>

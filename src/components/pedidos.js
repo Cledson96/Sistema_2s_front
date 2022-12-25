@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getpedidos } from './requisicao'
 import { getclientes } from './requisicao'
+import menu from '../img/menu.png'
 
 export default function Pedidos() {
     const [selectedDate, setselectedDate] = useState(null);
@@ -17,6 +18,7 @@ export default function Pedidos() {
     const [client, setclient] = useState([]);
     const [atualiza, setatualiza] = useState(true);
     const [atualiza2, setatualiza2] = useState(true);
+    const [menuon, setmenuon] = useState(false)
 
 
     let dataFormatada = ((startDate.getDate()) + "/" + ((startDate.getMonth() + 1)) + "/" + startDate.getFullYear());
@@ -100,7 +102,7 @@ export default function Pedidos() {
             <img className='logo_inicio' alt='' src={logo} />
         </div>
         <div className='fundo_inicio'>
-            {menu_lateral()}
+        {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
             <div className="inicio">
                 <div className='forma'>
                     <h1 className='titulo'>Informações dos pedidos</h1>

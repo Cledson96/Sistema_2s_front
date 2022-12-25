@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import menu_lateral from './menu_lateral';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { deletepedido } from './requisicao'
+import menu from '../img/menu.png'  
 
 export default function Entrada_pedidos() {
     let nome = localStorage.getItem("nome_logado");
@@ -25,13 +26,14 @@ export default function Entrada_pedidos() {
     const [clientee, setclientee] = useState();
     const [motoboy, setmotoboy] = useState();
     const [pesquisar, setpesquisar] = useState({ motoboy: "" });
-    const [rows, setrows] = useState([])
-    const [pedidosfil, setpedidosfil] = useState()
-    const [atualiza, setatualiza] = useState(true)
-    const [atualiza2, setatualiza2] = useState(true)
+    const [rows, setrows] = useState([]);
+    const [pedidosfil, setpedidosfil] = useState();
+    const [atualiza, setatualiza] = useState(true);
+    const [atualiza2, setatualiza2] = useState(true);
     const [selectionModel, setSelectionModel] = useState([]);
-    const [deletar, setdeletar] = useState([])
-
+    const [deletar, setdeletar] = useState([]);
+    const [menuon, setmenuon] = useState(false);
+    
 
     useEffect(() => {
         if (motoboy) {
@@ -65,8 +67,8 @@ export default function Entrada_pedidos() {
         resposta.catch(() => alert("Tivemos um problema para atualizar os clientes!!"))
     }, []);
 
-    let teste
-    let ver
+    let teste;
+    let ver;
 
     useEffect(() => {
         if (pedidosfil) {
@@ -169,7 +171,7 @@ export default function Entrada_pedidos() {
                 <img className='logo_inicio' alt='' src={logo} />
             </div>
             <div className='fundo_inicio'>
-                {menu_lateral()}
+            {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
                 <div className="inicio">
                     <div className='forma'>
                         <h1 className='forma_titulo'>Entrada de pedidos</h1>

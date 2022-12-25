@@ -2,10 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 
 body {
-
-
     min-height: 100vh;
-    background-color: rgba(92, 149, 224, 0.788);
+    background-color: rgba(202, 219, 241, 0.788);
 }
 
 .fundo {
@@ -69,7 +67,6 @@ button {
 
 .header {
     height: 60px;
-    background: rgb(29, 77, 145);
     background: -moz-linear-gradient(top, rgb(29, 77, 145) 0%, rgb(39, 123, 207) 50%, rgb(31, 108, 191) 51%, rgb(111, 172, 229) 100%);
     background: -webkit-linear-gradient(top, rgb(29, 77, 145) 0%, rgb(39, 123, 207) 50%, rgb(31, 108, 191) 51%, rgb(111, 172, 229) 100%);
     background: linear-gradient(to bottom, rgb(29, 77, 145) 0%, rgb(39, 123, 207) 50%, rgb(31, 108, 191) 51%, rgb(111, 172, 229) 100%);
@@ -97,6 +94,7 @@ li {
 li:hover {
     transform: scale(1.1);
 
+
 }
 
 .fundo_inicio {
@@ -118,12 +116,14 @@ li:hover {
 }
 
 .menu_lateral {
-    background-color: rgba(43, 56, 228, 0.7);
+    background-color: rgba(53, 54, 77, 0.7);
     width: 20vw;
     min-height: 100%;
-
     position: relative;
     padding-top: 20px;
+    border-radius: 10px;
+
+    transition: 500ms linear
 }
 
 .logado {
@@ -141,13 +141,20 @@ li:hover {
 ul {
     display: flex;
     flex-direction: column;
-
+    align-items: center;
     height: 100%;
+
 }
 
 .link {
     text-decoration: none;
+    margin-top: 15px;
+}
 
+.link :hover {
+    color: #28d628;
+    background-color: azure;
+    border-radius: 10px;
 }
 
 .voltar {
@@ -466,18 +473,20 @@ td {
 
 .cadastro {
     align-items: center;
-    
+
 }
 
 .titulos {
     font-family: 'Merriweather Sans', sans-serif;
     font-size: 40px;
 }
-.cadastro input{
+
+.cadastro input {
     margin-right: 35px;
 
 }
-.endereco{
+
+.endereco {
     max-width: 160vw;
     width: 700px;
 }
