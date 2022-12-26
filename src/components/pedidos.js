@@ -50,10 +50,20 @@ export default function Pedidos() {
             console.log(quant)
             console.log(ref.data)
             for (let i = 0; i < client.length; i++) {
+                let qt = Number(0)
+                let red = ref.data.filter(ref => ref.cliente == client[i].name)
                 console.log(client[i].name)
                 console.log(ref.data)
-                console.log(ref.data.filter(ref => ref.cliente == client[i].name).length)
+                console.log(ref.data.filter(ref => ref.cliente == client[i].name))
                 console.log(ref.data.filter(ref => ref.status == "ok" && ref.cliente == client[i].name).length)
+               console.log(ref.data[0].qtd) 
+               var total = red.reduce(getTotal, 0);
+               function getTotal(total, item) {
+                return total + item.qtd 
+               }
+              console.log(total)
+              console.log(qt)
+
                 ausentee.push(
                     {
                         cliente: client[i].name,
@@ -62,7 +72,7 @@ export default function Pedidos() {
                 )
                 quant.push({
                     cliente: client[i].name,
-                    qtd: ref.data.filter(ref => ref.cliente == client[i].name).length
+                    qtd: total
                 })
             }
             console.log(quant)
@@ -102,7 +112,7 @@ export default function Pedidos() {
             <img className='logo_inicio' alt='' src={logo} />
         </div>
         <div className='fundo_inicio'>
-        {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
+            {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
             <div className="inicio">
                 <div className='forma'>
                     <h1 className='titulo'>Informações dos pedidos</h1>

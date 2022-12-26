@@ -43,6 +43,7 @@ export default function Entrada_ausentes() {
 
     useEffect(() => {
         let ver
+        console.log(pedidosfiltro)
         if (pedidosfiltro) {
             ver = pedidosfiltro.map((ref, index) => {
                 return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status, ide: ref._id })
@@ -77,6 +78,9 @@ export default function Entrada_ausentes() {
         { field: 'Data', headerName: 'Data', width: 110 },
         { field: 'login', headerName: 'login', width: 150 },
         { field: 'status', headerName: 'status', width: 110 },
+        { field: 'qtd_pedidos', headerName: 'qtd_pedidos', width: 110 },
+        { field: 'qtd_ausente', headerName: 'qtd_ausente', width: 110 },
+        { field: 'img', headerName: 'img', width: 110 },
 
     ];
 
