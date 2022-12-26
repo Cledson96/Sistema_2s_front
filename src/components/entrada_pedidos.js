@@ -9,9 +9,9 @@ import { useEffect, useState } from 'react'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import menu_lateral from './menu_lateral';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
 import { deletepedido } from './requisicao'
-import menu from '../img/menu.png'  
+import menu from '../img/menu.png'
 
 export default function Entrada_pedidos() {
     let nome = localStorage.getItem("nome_logado");
@@ -33,7 +33,11 @@ export default function Entrada_pedidos() {
     const [selectionModel, setSelectionModel] = useState([]);
     const [deletar, setdeletar] = useState([]);
     const [menuon, setmenuon] = useState(false);
-    
+    const [arquivo, setarquivo] = useState("not");
+    const [qtd, setqtd] = useState(1);
+
+
+
 
     useEffect(() => {
         if (motoboy) {
@@ -76,10 +80,11 @@ export default function Entrada_pedidos() {
         }
         if (teste) {
             ver = teste.map((ref, index) => {
-                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status, ide: ref._id })
+                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status, ide: ref._id, img: ref.img,qtd:ref.qtd})
 
             });
             setrows(ver)
+
         }
 
     }, [atualiza]);
@@ -93,10 +98,15 @@ export default function Entrada_pedidos() {
             cliente: clientee,
             name: nome,
             motoboy,
-            pedido: value
+            pedido: value,
+            img: arquivo,
+            qtd
 
         });
     };
+    console.log(cadastrar)
+
+
 
     function handleForma({ value }) {
         setrows(teste);
@@ -118,7 +128,8 @@ export default function Entrada_pedidos() {
         let resposta = postCadastro_pedidos(cadastrare);
 
         resposta.then((ref) => {
-
+            setarquivo("not");
+            setqtd(1)
             setcadastrar(({
 
                 data: dataFormatada,
@@ -126,7 +137,9 @@ export default function Entrada_pedidos() {
                 cliente: clientee,
                 name: nome,
                 motoboy,
-                pedido: ""
+                pedido: "",
+                img:"",
+                qtd:""
 
             }))
             setatualiza2(!atualiza2)
@@ -143,6 +156,28 @@ export default function Entrada_pedidos() {
         { field: 'Data', headerName: 'Data', width: 110 },
         { field: 'login', headerName: 'login', width: 150 },
         { field: 'status', headerName: 'status', width: 110 },
+        {
+            field: 'img',
+            headerName: 'img',
+            width: 90,
+            sortable: false,
+            disableClickEventBubbling: true,
+
+            renderCell: (params) => {
+                const onClick = (e) => {
+                    const currentRow = params.row;
+                    console.log(params.row)
+                    return alert(JSON.stringify(currentRow, null, 4));
+                };
+                return (
+
+                    <a target="_blank" width="70" height="38" href={params.row.img == "not" ? "#" : params.row.img}>{params.row.img == "not" ? "Não possui" : "Abrir img"}</a>
+
+                );
+            },
+        },
+        { field: 'qtd', headerName: 'qtd', width: 90 },
+
 
     ];
 
@@ -165,16 +200,18 @@ export default function Entrada_pedidos() {
         apagou.then(setatualiza2(!atualiza2))
 
     }
+
     return (
         <div className="sistema">
             <div className="header">
                 <img className='logo_inicio' alt='' src={logo} />
             </div>
             <div className='fundo_inicio'>
-            {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
+                {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
                 <div className="inicio">
                     <div className='forma'>
                         <h1 className='forma_titulo'>Entrada de pedidos</h1>
+
                         <div className='ajuste'>
                             <span className='selection'>Motoboy:</span> <select onChange={(e) => { setmotoboy(e.target.value); handleForma({ name: e.target.name, value: e.target.value }) }} className='select' id="motoboys">
                                 <option ></option>pesquisa()
@@ -195,7 +232,7 @@ export default function Entrada_pedidos() {
                             <span className='arruma'>
 
                                 <span className='selection'>Cliente:</span>
-                                <select onChange={(e) => { setclientee(e.target.value); console.log(e.target.value) }} className='select' id="motoboys">
+                                <select onChange={(e) => { setclientee(e.target.value) }} className='select' id="motoboys">
                                     <option  > </option>
                                     <option value="Integrado" > 2S</option>
                                     {client ? client.map((ref, index) => {
@@ -215,9 +252,15 @@ export default function Entrada_pedidos() {
                                     placeholderText={dataFormatada} />
                                 </span>
                             </span>
-
-
+                          
                         </div>
+                        <div className='ajuste'>
+                                <span className='selection'>IMG:</span>  <input value={arquivo == "not" ? "":arquivo} onChange={(e) => {if(e.target.value == ""){
+                                    setarquivo("not") }else{
+                                        setarquivo(e.target.value)
+                                    }}} className='select'></input>
+                               {arquivo == "not" ? <div></div> :  <><span className='selection'>QTD PEDIDOS:</span>  <input value={qtd} onChange={(e) => setqtd(e.target.value)} className='select_login'></input></>} 
+                            </div>
                         <div className='ajuste'>
                             <span className='selection'>Código pedido:</span> <input value={cadastrar.pedido ? cadastrar.pedido : ""} onKeyPress={(e) => {
                                 if (e.key === "Enter") {
