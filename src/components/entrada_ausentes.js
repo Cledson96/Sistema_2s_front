@@ -46,7 +46,7 @@ export default function Entrada_ausentes() {
         console.log(pedidosfiltro)
         if (pedidosfiltro) {
             ver = pedidosfiltro.map((ref, index) => {
-                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status, ide: ref._id })
+                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status, ide: ref._id,qtd_pedidos: ref.qtd,qtd_ausente: ref.ausente,img: ref.img })
 
             });
             setrows(ver)
@@ -80,7 +80,24 @@ export default function Entrada_ausentes() {
         { field: 'status', headerName: 'status', width: 110 },
         { field: 'qtd_pedidos', headerName: 'qtd_pedidos', width: 110 },
         { field: 'qtd_ausente', headerName: 'qtd_ausente', width: 110 },
-        { field: 'img', headerName: 'img', width: 110 },
+        { field: 'img',
+        headerName: 'img',
+        width: 90,
+        sortable: false,
+        disableClickEventBubbling: true,
+
+        renderCell: (params) => {
+            const onClick = (e) => {
+                const currentRow = params.row;
+                console.log(params.row)
+                return alert(JSON.stringify(currentRow, null, 4));
+            };
+            return (
+
+                <a target="_blank" width="70" height="38" href={params.row.img == "not" ? "#" : params.row.img}>{params.row.img == "not" ? "Não possui" : "Abrir img"}</a>
+
+            );
+        },},
 
     ];
 

@@ -18,6 +18,7 @@ export default function Entrada_pedidos() {
 
     const [selectedDate, setselectedDate] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
+
     let dataFormatada = ((startDate.getDate()) + "/" + ((startDate.getMonth() + 1)) + "/" + startDate.getFullYear());
     const [boys, setboys] = useState([]);
     const [client, setclient] = useState([]);
@@ -80,7 +81,7 @@ export default function Entrada_pedidos() {
         }
         if (teste) {
             ver = teste.map((ref, index) => {
-                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status, ide: ref._id, img: ref.img,qtd:ref.qtd})
+                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status, ide: ref._id, img: ref.img, qtd: ref.qtd })
 
             });
             setrows(ver)
@@ -122,8 +123,12 @@ export default function Entrada_pedidos() {
 
     function autoriza() {
 
-
-        let cadastrare = { ...cadastrar, cliente: clientee, motoboy }
+        var dataAtual = new Date();
+        var horas = dataAtual.getHours();
+        var minutos = dataAtual.getMinutes();
+ 
+        let cadastrare = { ...cadastrar, cliente: clientee, motoboy,horas: horas + ":" + minutos,ausente: 0 }
+   
 
         let resposta = postCadastro_pedidos(cadastrare);
 
@@ -138,8 +143,8 @@ export default function Entrada_pedidos() {
                 name: nome,
                 motoboy,
                 pedido: "",
-                img:"",
-                qtd:""
+                img: "",
+                qtd: ""
 
             }))
             setatualiza2(!atualiza2)
@@ -252,15 +257,18 @@ export default function Entrada_pedidos() {
                                     placeholderText={dataFormatada} />
                                 </span>
                             </span>
-                          
+
                         </div>
                         <div className='ajuste'>
-                                <span className='selection'>IMG:</span>  <input value={arquivo == "not" ? "":arquivo} onChange={(e) => {if(e.target.value == ""){
-                                    setarquivo("not") }else{
-                                        setarquivo(e.target.value)
-                                    }}} className='select'></input>
-                               {arquivo == "not" ? <div></div> :  <><span className='selection'>QTD PEDIDOS:</span>  <input value={qtd} onChange={(e) => setqtd(e.target.value)} className='select_login'></input></>} 
-                            </div>
+                            <span className='selection'>IMG:</span>  <input value={arquivo == "not" ? "" : arquivo} onChange={(e) => {
+                                if (e.target.value == "") {
+                                    setarquivo("not")
+                                } else {
+                                    setarquivo(e.target.value)
+                                }
+                            }} className='select'></input>
+                            {arquivo == "not" ? <div></div> : <><span className='selection'>QTD PEDIDOS:</span>  <input value={qtd} onChange={(e) => setqtd(e.target.value)} className='select_login'></input></>}
+                        </div>
                         <div className='ajuste'>
                             <span className='selection'>Código pedido:</span> <input value={cadastrar.pedido ? cadastrar.pedido : ""} onKeyPress={(e) => {
                                 if (e.key === "Enter") {

@@ -56,18 +56,22 @@ export default function Pedidos() {
                 console.log(ref.data)
                 console.log(ref.data.filter(ref => ref.cliente == client[i].name))
                 console.log(ref.data.filter(ref => ref.status == "ok" && ref.cliente == client[i].name).length)
-               console.log(ref.data[0].qtd) 
-               var total = red.reduce(getTotal, 0);
-               function getTotal(total, item) {
-                return total + item.qtd 
-               }
-              console.log(total)
-              console.log(qt)
+                console.log(ref.data[0].qtd)
+                var total = red.reduce(getTotal, 0);
+                function getTotal(total, item) {
+                    return total + item.qtd
+                }
+                var totalaus = red.reduce(getTotala, 0);
+                function getTotala(totalaus, item) {
+                    return totalaus + item.ausente
+                }
+                console.log(total)
+                console.log(totalaus)
 
                 ausentee.push(
                     {
                         cliente: client[i].name,
-                        qtd: ref.data.filter(ref => ref.status == "ausente" && ref.cliente == client[i].name).length
+                        qtd: totalaus
                     }
                 )
                 quant.push({

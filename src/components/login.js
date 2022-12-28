@@ -9,7 +9,7 @@ export default function Login({ setdados }) {
     const [login, setlogin] = useState({});
     const [carregando, setcarregando] = useState(true);
     const navigate = useNavigate();
-    
+
 
 
     function handleForm({ value, name }) {
@@ -27,16 +27,30 @@ export default function Login({ setdados }) {
             localStorage.setItem("nome_logado", ref.data.name);
             navigate('/inicio')
         })
-        resposta.catch((ref) => { setcarregando(true) ; alert(ref.response.data) })
+        resposta.catch((ref) => { setcarregando(true); alert(ref.response.data) })
 
     }
     return (
         <div className='fundo'>
-            <img className='logo_img' alt='' src={logo}/>
-            <input name="email" type="email" placeholder='E-mail' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
-            <input name="password" type="password" placeholder='Senha' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
-            <button onClick={autoriza} className='Entrar'>{carregando === true ? "Entrar" : <img className='gif' alt='gif' src={gif}/>}</button>
-          
+            <div className='container'>
+                <div>
+                    <img className='logo_img' alt='' src={logo} />
+                    <div className='dados'>
+                        <div className='inputin'>
+                            <input className='login_input' name="email" type="email" placeholder='E-mail' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
+                        </div>
+                        <div className='inputin' >
+                            <input className='login_input' name="password" type="password" placeholder='Senha' onChange={(e) => handleForm({ name: e.target.name, value: e.target.value, })} />
+                        </div>
+
+                        <button onClick={autoriza} className='Entrar'>{carregando === true ? "Entrar" : <img className='gif' alt='gif' src={gif} />}</button>
+                    </div>
+
+                </div>
+
+
+            </div>
+
         </div>
 
     )
