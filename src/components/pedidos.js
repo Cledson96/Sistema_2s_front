@@ -19,15 +19,41 @@ export default function Pedidos() {
     const [atualiza, setatualiza] = useState(true);
     const [atualiza2, setatualiza2] = useState(true);
     const [menuon, setmenuon] = useState(false)
-
+    const hoje = ((startDate.getDate()) + "/" + ((startDate.getMonth() + 1)) + "/" + startDate.getFullYear());
+    const [totalhoje, settotalhoje] = useState(0)
+    const [totalausente, settotalausente] = useState(0)
+    const [totalcliente, settotalcliente] = useState(0)
 
     let dataFormatada = ((startDate.getDate()) + "/" + ((startDate.getMonth() + 1)) + "/" + startDate.getFullYear());
 
+    useEffect(() => {
+        let pesquisado = getpedidos("data", dataFormatada);
+        pesquisado.then((ref) => {
+            var valorInicial = 0;
+            var valorInicial2 = 0;
+            var soma = ref.data.reduce(function (valorInicial, valorAtual) {
+                let sumi = Number(valorAtual.qtd)
+                return valorInicial + sumi;
+            }, valorInicial)
+
+            var soma2 = ref.data.reduce(function (valorInicial2, valorAtual2) {
+
+                let sumi2 = Number(valorAtual2.ausente)
+            
+            
+                return valorInicial2 + sumi2;
+            }, valorInicial2)
+            settotalausente(soma2)
+            settotalhoje(soma)
+        })
+        pesquisado.catch((ref) => console.log(ref))
+
+    }, [dataFormatada])
 
     useEffect(() => {
         let resposta = getclientes()
         resposta.then((res) => {
-
+            settotalcliente(res.data.length)
             console.log(res.data)
             setclient(res.data)
             let ver = res.data.map((ref, index) => {
@@ -59,7 +85,7 @@ export default function Pedidos() {
                 console.log(ref.data[0].qtd)
                 var total = red.reduce(getTotal, 0);
                 function getTotal(total, item) {
-                    return total + item.qtd
+                    return total + Number(item.qtd)
                 }
                 var totalaus = red.reduce(getTotala, 0);
                 function getTotala(totalaus, item) {
@@ -119,7 +145,12 @@ export default function Pedidos() {
             {menuon == true ? menu_lateral(setmenuon) : <button onClick={() => setmenuon(true)} className='menuon'><img alt='menu' className='menuon1' src={menu} /></button>}
             <div className="inicio">
                 <div className='forma'>
-                    <h1 className='titulo'>Informações dos pedidos</h1>
+                    <div className='carda'>
+                        <div className='dash'> <h1 className='dash_text'>Pedidos total de {dataFormatada}</h1> <h1 className='dash_numb'>{totalhoje}</h1></div>
+                        <div className='dash dois'><h1 className='dash_text'>Pedidos ausentes {dataFormatada}</h1> <h1 className='dash_numb2'>{totalausente}</h1></div>
+                        <div className='dash'><h1 className='dash_text'>Clientes cadastrados </h1> <h1 className='dash_numb2'>{totalcliente}</h1></div>
+                        <div className='dash'></div>
+                    </div>
 
                     <div className='listapedidos'>
                         <span className='selectionDate'>Data:<DatePicker
@@ -130,7 +161,7 @@ export default function Pedidos() {
                             id="dateselect"
                             placeholderText={dataFormatada} />
                         </span>
-                        <DataGrid
+                        {/* <DataGrid
                             rows={rows}
                             columns={columns}
                             pageSize={7}
@@ -145,7 +176,7 @@ export default function Pedidos() {
                                 }
                             }}
 
-                        />
+                        /> */}
                     </div>
                 </div>
 
