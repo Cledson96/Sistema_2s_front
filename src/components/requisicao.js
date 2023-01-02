@@ -42,8 +42,7 @@ export function postCadastro_pedidos(body) {
 
 export function getpedidos(chave,filtro) {
  
-console.log(chave)
-console.log(filtro)
+
   const promise = axios.get(`${BASE_URL}/pedidos`, {
     headers: { chave : chave,
     filtro : filtro}
@@ -63,7 +62,7 @@ export function deletepedido(pedido) {
   return promise;
 }
 export function putpedido(pedido) {
-  console.log(pedido)
+
   const promise = axios.put(`${BASE_URL}/ausente`, {
     pedido
   });

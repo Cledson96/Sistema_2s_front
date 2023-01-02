@@ -7,7 +7,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getpedidos } from './requisicao'
 import { getclientes } from './requisicao'
+import { getmotoboys } from './requisicao'
 import menu from '../img/menu.png'
+import { Chart } from 'react-google-charts'
 
 export default function Pedidos() {
     const [selectedDate, setselectedDate] = useState(null);
@@ -23,38 +25,57 @@ export default function Pedidos() {
     const [totalhoje, settotalhoje] = useState(0)
     const [totalausente, settotalausente] = useState(0)
     const [totalcliente, settotalcliente] = useState(0)
+    const [motoboys, setmotoboys] = useState()
+    const [options, setOptions] = useState({
+        title: 'Pedidos por clientes',
+        is3D: true,
+        backgroundColor: {
+            fill: 'none'
+        }
+    })
 
+    const [options2, setOptions2] = useState({
+        title: 'Ausentes por clientes',
+        is3D: true,
+        backgroundColor: {
+            fill: 'none'
+        }
+    })
+
+    const [data, setData] = useState()
+    const [data2, setData2] = useState()
+    const [dataold, setDataold] = useState()
+    const [datanew, setDatanew] = useState()
     let dataFormatada = ((startDate.getDate()) + "/" + ((startDate.getMonth() + 1)) + "/" + startDate.getFullYear());
 
     useEffect(() => {
-        let pesquisado = getpedidos("data", dataFormatada);
-        pesquisado.then((ref) => {
-            var valorInicial = 0;
-            var valorInicial2 = 0;
-            var soma = ref.data.reduce(function (valorInicial, valorAtual) {
-                let sumi = Number(valorAtual.qtd)
-                return valorInicial + sumi;
-            }, valorInicial)
+        let resposta = getmotoboys()
+        resposta.then((res) => {
 
-            var soma2 = ref.data.reduce(function (valorInicial2, valorAtual2) {
 
-                let sumi2 = Number(valorAtual2.ausente)
-            
-            
-                return valorInicial2 + sumi2;
-            }, valorInicial2)
-            settotalausente(soma2)
-            settotalhoje(soma)
-        })
-        pesquisado.catch((ref) => console.log(ref))
+            setmotoboys(res.data)
 
-    }, [dataFormatada])
+            setatualiza2(!atualiza2)
+        });
+        resposta.catch(() => alert("Tivemos um problema para atualizar os clientes!!"))
+    }, []);
+
 
     useEffect(() => {
         let resposta = getclientes()
         resposta.then((res) => {
+
+            let re = [
+                ['cliente', 'Quantidade']
+            ]
+            res.data.map(
+                (ref) => {
+                    console.log(re)
+                    re.push([ref.name, 0])
+                }
+            )
+            setData(re)
             settotalcliente(res.data.length)
-            console.log(res.data)
             setclient(res.data)
             let ver = res.data.map((ref, index) => {
                 return ({ id: index + 1, Cliente: ref.name, Pedidos: "carregando", Ausentes: "carregando", Data: dataFormatada })
@@ -73,39 +94,92 @@ export default function Pedidos() {
         let pesquisado = getpedidos("data", dataFormatada);
 
         pesquisado.then((ref) => {
-            console.log(quant)
+            let reva = [
+                ['motoboy', 'Quantidade']
+            ]
+
+            let reva2 = [
+                ['motoboy', 'Ausentes']
+            ]
+            console.log(motoboys)
+            var valorInicial = 0;
+            var valorInicial2 = 0;
+            var soma = ref.data.reduce(function (valorInicial, valorAtual) {
+                let sumi = Number(valorAtual.qtd)
+                return valorInicial + sumi;
+            }, valorInicial)
+
+            var soma2 = ref.data.reduce(function (valorInicial2, valorAtual2) {
+                let sumi2 = Number(valorAtual2.ausente)
+
+                return valorInicial2 + sumi2;
+            }, valorInicial2)
+
+            let re2 = [
+                ['cliente', 'Quantidade']
+            ]
+
+            let re3 = [
+                ['cliente', 'Quantidade']
+            ]
+            settotalausente(soma2)
+            settotalhoje(soma)
             console.log(ref.data)
+            for (let ii = 0; ii < motoboys.length; ii++) {
+                let qt1 = Number(0)
+                let reda = ref.data.filter(ref => ref.motoboy == motoboys[ii].name)
+                console.log(reda)
+                console.log(motoboys[ii].name)
+                var total1 = reda.reduce(getTotal1, 0);
+                function getTotal1(total1, item1) {
+                    return total1 + Number(item1.qtd)
+                }
+                var totalaus1 = reda.reduce(getTotala1, 0);
+                function getTotala1(totalaus1, item2) {
+                    return totalaus1 + item2.ausente
+                }
+                console.log(total1)
+                console.log(totalaus1)
+                reva.push([motoboys[ii].name, total1])
+                reva2.push([motoboys[ii].name, totalaus1])
+                setDataold(reva2)
+                setDatanew(reva)
+                console.log(reva)
+
+            }
             for (let i = 0; i < client.length; i++) {
+
                 let qt = Number(0)
                 let red = ref.data.filter(ref => ref.cliente == client[i].name)
-                console.log(client[i].name)
-                console.log(ref.data)
-                console.log(ref.data.filter(ref => ref.cliente == client[i].name))
-                console.log(ref.data.filter(ref => ref.status == "ok" && ref.cliente == client[i].name).length)
-                console.log(ref.data[0].qtd)
+
                 var total = red.reduce(getTotal, 0);
                 function getTotal(total, item) {
                     return total + Number(item.qtd)
                 }
+
                 var totalaus = red.reduce(getTotala, 0);
                 function getTotala(totalaus, item) {
                     return totalaus + item.ausente
                 }
-                console.log(total)
-                console.log(totalaus)
 
+                re2.push([client[i].name, total])
+                re3.push([client[i].name, totalaus])
+
+                setData(re2)
                 ausentee.push(
                     {
                         cliente: client[i].name,
                         qtd: totalaus
                     }
                 )
+                setData2(re3)
                 quant.push({
                     cliente: client[i].name,
                     qtd: total
                 })
+
             }
-            console.log(quant)
+
             let ver = client.map((ref, index) => {
 
                 return ({ id: index + 1, Cliente: ref.name, Pedidos: quant.filter((res) => res.cliente == ref.name)[0].qtd, Ausentes: ausentee.filter((res) => res.cliente == ref.name)[0].qtd, Data: dataFormatada })
@@ -116,13 +190,13 @@ export default function Pedidos() {
             atualizaa()
 
         })
+        console.log(datanew)
+        console.log(dataold)
 
         pesquisado.catch((ref) => console.log(ref))
     }, [dataFormatada, atualiza2]);
 
     function atualizaa() {
-        console.log(qtd)
-
 
         setatualiza(!atualiza)
 
@@ -136,6 +210,11 @@ export default function Pedidos() {
         { field: 'Data', headerName: 'Data', width: 150 },
 
     ];
+
+    const diffdata = {
+        old: dataold,
+        new: datanew,
+    };
 
     return (<div className="sistema">
         <div className="header">
@@ -161,6 +240,34 @@ export default function Pedidos() {
                             id="dateselect"
                             placeholderText={dataFormatada} />
                         </span>
+                        <div className='arruma'>
+                            <Chart
+                                width={'500px'}
+                                height={'300px'}
+                                chartType="PieChart"
+                                data={data}
+                                options={options}
+                              
+                            />
+
+                            <Chart
+                                width={'500px'}
+                                height={'300px'}
+                                chartType="PieChart"
+                                data={data2}
+                                options={options2}
+                               
+                            />
+                            <Chart
+                                chartType="ColumnChart"
+                                width="100%"
+                                height="300px"
+                                diffdata={diffdata}
+                                options={options}
+                              
+                            />
+                        </div>
+
                         {/* <DataGrid
                             rows={rows}
                             columns={columns}
