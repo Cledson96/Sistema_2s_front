@@ -45,8 +45,10 @@ export default function Entrada_ausentes() {
         let ver
         console.log(pedidosfiltro)
         if (pedidosfiltro) {
+            
             ver = pedidosfiltro.map((ref, index) => {
-                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status, ide: ref._id,qtd_pedidos: ref.qtd,qtd_ausente: ref.ausente,img: ref.img })
+                let format = new Date(ref.data); let proc = (format.getDate()) + "/" + ((format.getMonth() + 1)) + "/" + format.getFullYear();
+                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: proc, login: ref.login, status: ref.status, ide: ref._id,qtd_pedidos: ref.qtd,qtd_ausente: ref.ausente,img: ref.img })
 
             });
             setrows(ver)

@@ -91,9 +91,11 @@ export default function Pedidos() {
         let quant = []
         let ausentee = []
         setqtd([])
-        let pesquisado = getpedidos("data", dataFormatada);
+        let pesquisado = getpedidos("data", startDate.getTime());
+       
 
         pesquisado.then((ref) => {
+            console.log(ref.data)
             let reva = [
                 ['motoboy', 'Quantidade']
             ]

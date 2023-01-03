@@ -37,9 +37,6 @@ export default function Entrada_pedidos() {
     const [arquivo, setarquivo] = useState("not");
     const [qtd, setqtd] = useState(1);
 
-
-
-
     useEffect(() => {
         if (motoboy) {
             let pesquisado = getpedidos("motoboy", motoboy);
@@ -77,11 +74,14 @@ export default function Entrada_pedidos() {
 
     useEffect(() => {
         if (pedidosfil) {
-            teste = pedidosfil.filter(ref => ref.data === dataFormatada)
+
+            teste = pedidosfil.filter((ref) => { let format = new Date(ref.data); let proc = (format.getDate()) + "/" + ((format.getMonth() + 1)) + "/" + format.getFullYear(); return proc === dataFormatada })
         }
         if (teste) {
+
             ver = teste.map((ref, index) => {
-                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: ref.data, login: ref.login, status: ref.status, ide: ref._id, img: ref.img, qtd: ref.qtd })
+                let format = new Date(ref.data); let proc = (format.getDate()) + "/" + ((format.getMonth() + 1)) + "/" + format.getFullYear();
+                return ({ id: index + 1, Motoboy: ref.motoboy, Pedido: ref.pedido, Cliente: ref.cliente, Data: proc, login: ref.login, status: ref.status, ide: ref._id, img: ref.img, qtd: ref.qtd })
 
             });
             setrows(ver)
@@ -94,7 +94,7 @@ export default function Entrada_pedidos() {
 
         setcadastrar({
 
-            data: dataFormatada,
+            data: startDate.getTime(),
             login,
             cliente: clientee,
             name: nome,
@@ -105,7 +105,7 @@ export default function Entrada_pedidos() {
 
         });
     };
-    console.log(cadastrar)
+
 
 
 
@@ -126,9 +126,9 @@ export default function Entrada_pedidos() {
         var dataAtual = new Date();
         var horas = dataAtual.getHours();
         var minutos = dataAtual.getMinutes();
- 
-        let cadastrare = { ...cadastrar, cliente: clientee, motoboy,horas: horas + ":" + minutos,ausente: 0 }
-   
+
+        let cadastrare = { ...cadastrar, cliente: clientee, motoboy, ausente: 0 }
+
 
         let resposta = postCadastro_pedidos(cadastrare);
 
@@ -137,7 +137,7 @@ export default function Entrada_pedidos() {
             setqtd(1)
             setcadastrar(({
 
-                data: dataFormatada,
+                data: startDate.getTime(),
                 login,
                 cliente: clientee,
                 name: nome,
@@ -250,8 +250,8 @@ export default function Entrada_pedidos() {
                                 </select>
 
                                 <span className='selectionDate'>Data: <DatePicker
-                                    selected={selectedDate}
-                                    onChange={(date) => { setStartDate(date) }}
+                                    selected={startDate}
+                                    onChange={(date) => { setStartDate(date); console.log(date.getTime()) }}
                                     className="selectcalendar"
                                     id="dateselect"
                                     placeholderText={dataFormatada} />
@@ -304,10 +304,8 @@ export default function Entrada_pedidos() {
                                         }
                                     }}
                                     onSelectionModelChange={(ids) => {
-                                        console.log(ids)
                                         array(ids)
                                         setSelectionModel(ids);
-                                        console.log(selectionModel)
                                     }}
 
                                 />

@@ -48,7 +48,7 @@ export function getpedidos(chave,filtro) {
     filtro : filtro}
   });
 
-  return promise;
+  return promise; 
  
 }
 
